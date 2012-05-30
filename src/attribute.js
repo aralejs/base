@@ -172,6 +172,10 @@ define(function(require, exports) {
         return toString.call(val) === '[object String]';
     }
 
+    function isFunction(val) {
+        return toString.call(val) === '[object Function]';
+    }
+
     function isPlainObject(o) {
         return o &&
             // 排除 boolean/string/number/function 等
@@ -320,12 +324,26 @@ define(function(require, exports) {
     }
 
 
+    // 对于 attrs 的 value 来说，以下值都认为是空值：
+    // null, undefined, '', [], {}, function(){}
+    function isEmptyAttrValue(o) {
+        return o == null || // null, undefined
+                (isString(o) || isArray(o)) && o.length === 0 || // '', []
+                isPlainObject(o) && isEmptyObject(o) || // {}
+                isFunction(o) && isEmptyFunction(o); // function() {}
+    }
+
+    function isEmptyFunction(o) {
+        return o.toString &&
+                o.toString().replace(/(?:function|[(){}\s]+)/g, '')
+                        .length === 0;
+    }
+
     // 判断属性值 a 和 b 是否相等，注意仅适用于属性值的判断，非普适的 === 或 == 判断。
     function isEqual(a, b) {
         if (a === b) return true;
 
-        // 对于 attrs 的 value 来说，null 和 undefined 等同
-        if (a == null || b == null) return a == b;
+        if (isEmptyAttrValue(a) && isEmptyAttrValue(b)) return true;
 
         // Compare `[[Class]]` names.
         var className = toString.call(a);
