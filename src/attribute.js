@@ -31,6 +31,9 @@ define(function(require, exports) {
             }
         }
 
+        // Convert `on/before/afterXxx` config to event handler.
+        parseEventsFromAttrs(this, attrs);
+
         // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs, 为了避免
         // this.attrs 从 prototype 上拿，这里必须将其初始化为空对象
         this.attrs = {};
@@ -231,6 +234,31 @@ define(function(require, exports) {
     }
 
 
+    var EVENT_PATTERN = /^(on|before|after)([A-Z].*)$/;
+    var EVENT_NAME_PATTERN = /^(Change)?([A-Z])(.*)/;
+
+    function parseEventsFromAttrs(host, attrs) {
+        for (var key in attrs) {
+            if (attrs.hasOwnProperty(key)) {
+                var value = attrs[key].value, m;
+
+                if (isFunction(value) && (m = key.match(EVENT_PATTERN))) {
+                    host[m[1]](getEventName(m[2]), value);
+                    delete attrs[key];
+                }
+            }
+        }
+    }
+
+    // Converts `Show` to `show` and `ChangeTitle` to `change:title`
+    function getEventName(name) {
+        var m = name.match(EVENT_NAME_PATTERN);
+        var ret = m[1] ? 'change:' : '';
+        ret += m[2].toLowerCase() + m[3];
+        return ret;
+    }
+
+
     var ATTR_SPECIAL_KEYS = ['value', 'getter', 'setter',
         'validator', 'readOnly'];
 
@@ -264,7 +292,6 @@ define(function(require, exports) {
         return attrs;
     }
 
-
     function hasOwnProperties(object, properties) {
         for (var i = 0, len = properties.length; i < len; i++) {
             if (object.hasOwnProperty(properties[i])) {
@@ -279,7 +306,6 @@ define(function(require, exports) {
         return '_onChange' + key.charAt(0).toUpperCase() + key.substring(1);
     }
 
-
     function copySpecialProps(specialProps, receiver, supplier, isAttr) {
         for (var i = 0, len = specialProps.length; i < len; i++) {
             var key = specialProps[i];
@@ -290,7 +316,6 @@ define(function(require, exports) {
             }
         }
     }
-
 
     function getInheritedAttrs(instance, specialProps) {
         var inherited = [];
@@ -324,19 +349,11 @@ define(function(require, exports) {
     }
 
 
-    // 对于 attrs 的 value 来说，以下值都认为是空值：
-    // null, undefined, '', [], {}, function(){}
+    // 对于 attrs 的 value 来说，以下值都认为是空值： null, undefined, '', [], {}
     function isEmptyAttrValue(o) {
         return o == null || // null, undefined
                 (isString(o) || isArray(o)) && o.length === 0 || // '', []
-                isPlainObject(o) && isEmptyObject(o) || // {}
-                isFunction(o) && isEmptyFunction(o); // function() {}
-    }
-
-    function isEmptyFunction(o) {
-        return o.toString &&
-                o.toString().replace(/(?:function|[(){}\s]+)/g, '')
-                        .length === 0;
+                isPlainObject(o) && isEmptyObject(o); // {}
     }
 
     // 判断属性值 a 和 b 是否相等，注意仅适用于属性值的判断，非普适的 === 或 == 判断。

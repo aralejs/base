@@ -10,21 +10,7 @@ define(function(require, exports, module) {
         Implements: [Events, Aspect, Attribute],
 
         initialize: function(config) {
-            this._parseEventsFromConfig(config);
             this.initAttrs(config);
-        },
-
-        // Convert `on/before/afterXxx` config to event handler.
-        _parseEventsFromConfig: function(config) {
-            for (var key in config) {
-                var value = config[key], m;
-
-                if (typeof value === 'function' &&
-                        (m = key.match(EVENT_PATTERN))) {
-                    this[m[1]](getEventName(m[2]), value);
-                    delete config[key];
-                }
-            }
         },
 
         destroy: function() {
@@ -37,20 +23,5 @@ define(function(require, exports, module) {
     });
 
     module.exports = Base;
-
-
-    // Helpers
-    // -------
-
-    var EVENT_PATTERN = /^(on|before|after)([A-Z].*)$/;
-    var EVENT_NAME_PATTERN = /^(Change)?([A-Z])(.*)/;
-
-    // Converts `Show` to `show` and `ChangeTitle` to `change:title`
-    function getEventName(name) {
-        var m = name.match(EVENT_NAME_PATTERN);
-        var ret = m[1] ? 'change:' : '';
-        ret += m[2].toLowerCase() + m[3];
-        return ret;
-    }
 
 });
