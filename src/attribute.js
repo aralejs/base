@@ -180,22 +180,19 @@ define(function(require, exports) {
         return true;
     }
 
-    function merge(receiver, supplier, deep) {
+    function merge(receiver, supplier) {
         var key, value;
 
         for (key in supplier) {
             if (supplier.hasOwnProperty(key)) {
                 value = supplier[key];
 
-                // 默认开启 deep，除非显式传入 false
-                if (deep !== false) {
-                    // 只 clone 数组和 plain object，其他的保持不变
-                    if (isArray(value)) {
-                        value = value.slice();
-                    }
-                    else if (isPlainObject(value)) {
-                        value = merge(receiver[key] || {}, value);
-                    }
+                // 只 clone 数组和 plain object，其他的保持不变
+                if (isArray(value)) {
+                    value = value.slice();
+                }
+                else if (isPlainObject(value)) {
+                    value = merge(receiver[key] || {}, value);
                 }
 
                 receiver[key] = value;
@@ -307,7 +304,7 @@ define(function(require, exports) {
         // Merge and clone default values to instance.
         var result = {};
         for (var i = 0, len = inherited.length; i < len; i++) {
-            result = merge(result, normalize(inherited[i]), false);
+            result = merge(result, normalize(inherited[i]));
         }
 
         return result;
