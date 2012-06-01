@@ -12,24 +12,21 @@ define(function(require, exports) {
     // attributes 是与实例相关的状态信息，可读可写，发生变化时，会自动触发相关事件
     exports.initAttrs = function(config) {
         var specialProps = this.propsInAttrs || [];
+        var attrs, inheritedAttrs, userValues;
 
         // Get all inherited attributes.
-        var attrs = getInheritedAttrs(this, specialProps);
+        inheritedAttrs = getInheritedAttrs(this, specialProps);
+        attrs = merge({}, inheritedAttrs);
 
         // Merge user-specific attributes from config.
         if (config) {
-            merge(attrs, normalize(config));
+            userValues = normalize(config);
+            merge(attrs, userValues);
         }
 
-        // Automatically register `_onChangeX` method as 'change:x' handler.
-        for (key in attrs) {
-            if (attrs.hasOwnProperty(key)) {
-                var eventKey = getChangeEventKey(key);
-                if (this[eventKey]) {
-                    this.on('change:' + key, this[eventKey]);
-                }
-            }
-        }
+        // Automatically register `this._onChangeAttr` method as
+        // a `change:attr` event handler.
+        parseEventsFromInstance(this);
 
         // Convert `on/before/afterXxx` config to event handler.
         parseEventsFromAttrs(this, attrs);
@@ -37,29 +34,13 @@ define(function(require, exports) {
         // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs，不存在覆盖问题
         this.attrs = attrs;
 
-        // 让属性的初始值生效
-        for (var key in attrs) {
-            if (!attrs.hasOwnProperty(key)) continue;
-            var attr = attrs[key];
-
-            // 在 set 里，有可能调用到 getter / setter 方法，在这两个方法里，很可能
-            // 会引用尚未初始化的变量，比如 this.element. 这时采取忽略就好。因为这种
-            // 情况下的属性，一般并不需要初始化。
-            try {
-
-                // 如果同时有 value 和 setter，先要调用一下 setter，以保证
-                // 关联属性的值正确。比如只有纯 setter / getter 的 xy 属性。
-                if (attr.hasOwnProperty('value') && attr.setter) {
-                    attr.setter.call(this, attr.value, key);
-                }
-
-                // 设置之，如果有改变，则触发事件
-                this.set(key, this.get(key));
-            }
-            catch (ex) {
-                // 虽然可忽略，但还是尽可能让开发者知晓
-                if (typeof console === 'object' && console.log) {
-                    console.log('A caught exception occurs: ' + ex);
+        // 对于有 setter 的属性，要用初始值 set 一下，以保证关联属性也一同初始化
+        var options = { silent: true };
+        for (var key in userValues) {
+            if (userValues.hasOwnProperty(key)) {
+                // 当 key 为 `on/before/afterXx` 时，attrs[key] 已不存在
+                if (attrs[key] && attrs[key].setter) {
+                    this.set(key, userValues[key].value, options);
                 }
             }
         }
@@ -93,11 +74,7 @@ define(function(require, exports) {
         }
 
         options || (options = {});
-
-        // ready 表示组件的初始状态是否已 OK
-        // 在 ready 之前，所有属性的设置操作都是静默的
-        var ready = this.__ready;
-        var silent = ready ? options.silent : true;
+        var silent = options.silent;
 
         var now = this.attrs;
         var changed = this.__changedAttrs || (this.__changedAttrs = {});
@@ -129,8 +106,7 @@ define(function(require, exports) {
             }
 
             // 获取设置前的 prev 值
-            // ready 之前，实例上属性的 prev 值都未定义
-            var prev = ready ? this.get(key) : null;
+            var prev = this.get(key);
 
             // 获取需要设置的 val 值
             // 都为对象时，做 merge 操作，以保留 prev 上没有覆盖的值
@@ -247,8 +223,61 @@ define(function(require, exports) {
     }
 
 
+    function getInheritedAttrs(instance, specialProps) {
+        var inherited = [];
+        var proto = instance.constructor.prototype;
+
+        while (proto) {
+            // 不要拿到 prototype 上的
+            if (!proto.hasOwnProperty('attrs')) {
+                proto.attrs = {};
+            }
+
+            // 将 proto 上的特殊 properties 放到 proto.attrs 上，以便合并
+            copySpecialProps(specialProps, proto.attrs, proto);
+
+            // 为空时不添加
+            if (!isEmptyObject(proto.attrs)) {
+                inherited.unshift(proto.attrs);
+            }
+
+            // 向上回溯一级
+            proto = proto.constructor.superclass;
+        }
+
+        // Merge and clone default values to instance.
+        var result = {};
+        for (var i = 0, len = inherited.length; i < len; i++) {
+            result = merge(result, normalize(inherited[i]));
+        }
+
+        return result;
+    }
+
+    function copySpecialProps(specialProps, receiver, supplier, isAttr) {
+        for (var i = 0, len = specialProps.length; i < len; i++) {
+            var key = specialProps[i];
+
+            if (key in supplier && supplier.hasOwnProperty(key)) {
+                var val = supplier[key];
+                receiver[key] = isAttr ? val.value : val;
+            }
+        }
+    }
+
+
     var EVENT_PATTERN = /^(on|before|after)([A-Z].*)$/;
     var EVENT_NAME_PATTERN = /^(Change)?([A-Z])(.*)/;
+
+    function parseEventsFromInstance(host) {
+        // 遍历 host 上的所有属性，包括继承下来的
+        for (var p in host) {
+            if (p.length > 9 && p.indexOf('_onChange' === 0)) {
+                var attrName = p.charAt(9).toLowerCase() + p.substring(10);
+                host.on('change:' + attrName, host[p]);
+            }
+        }
+    }
 
     function parseEventsFromAttrs(host, attrs) {
         for (var key in attrs) {
@@ -312,53 +341,6 @@ define(function(require, exports) {
             }
         }
         return false;
-    }
-
-
-    function getChangeEventKey(key) {
-        return '_onChange' + key.charAt(0).toUpperCase() + key.substring(1);
-    }
-
-    function copySpecialProps(specialProps, receiver, supplier, isAttr) {
-        for (var i = 0, len = specialProps.length; i < len; i++) {
-            var key = specialProps[i];
-
-            if (key in supplier && supplier.hasOwnProperty(key)) {
-                var val = supplier[key];
-                receiver[key] = isAttr ? val.value : val;
-            }
-        }
-    }
-
-    function getInheritedAttrs(instance, specialProps) {
-        var inherited = [];
-        var proto = instance.constructor.prototype;
-
-        while (proto) {
-            // 不要拿到 prototype 上的
-            if (!proto.hasOwnProperty('attrs')) {
-                proto.attrs = {};
-            }
-
-            // 将 proto 上的特殊 properties 放到 proto.attrs 上，以便合并
-            copySpecialProps(specialProps, proto.attrs, proto);
-
-            // 为空时不添加
-            if (!isEmptyObject(proto.attrs)) {
-                inherited.unshift(proto.attrs);
-            }
-
-            // 向上回溯一级
-            proto = proto.constructor.superclass;
-        }
-
-        // Merge and clone default values to instance.
-        var result = {};
-        for (var i = 0, len = inherited.length; i < len; i++) {
-            result = merge(result, normalize(inherited[i]));
-        }
-
-        return result;
     }
 
 
