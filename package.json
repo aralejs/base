@@ -1,4 +1,14 @@
 {
     "name": "base",
-    "version": "0.9.16"
+    "version": "0.9.16",
+    "moduleDependencies": {
+        "class": "0.9.2",
+        "events": "0.9.1"
+    },
+    "output": {
+        "base.js": ["base.js"]
+    },
+    "tests": [
+        "base"
+    ]
 }
