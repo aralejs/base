@@ -7,7 +7,7 @@
 
     // no cache
     seajs.config({
-        debug: 2
+        debug: 1
     });
 
 
