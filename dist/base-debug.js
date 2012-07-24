@@ -1,4 +1,4 @@
-define("#base/0.9.16/base-debug", ["./aspect-debug", "./attribute-debug", "events/0.9.1/events-debug", "class/0.9.2/class-debug"], function(require, exports, module) {
+define("#base/0.9.16/base-debug", ["./aspect-debug", "./attribute-debug", "#class/0.9.2/class-debug", "#events/0.9.1/events-debug"], function(require, exports, module) {
 
     // Base
     // ---------
