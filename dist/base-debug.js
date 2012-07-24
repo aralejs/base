@@ -5,8 +5,8 @@ define("#base/0.9.16/base-debug", ["./aspect-debug", "./attribute-debug", "event
     // Base 是一个基础类，提供 Class、Events、Attrs 和 Aspect 支持。
 
 
-    var Class = require('class/#class/0.9.2/class/class-debug');
-    var Events = require('events/#events/0.9.1/events/events-debug');
+    var Class = require('#class/0.9.2/class-debug');
+    var Events = require('#events/0.9.1/events-debug');
     var Aspect = require('./aspect-debug');
     var Attribute = require('./attribute-debug');
 
