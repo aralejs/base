@@ -6,7 +6,7 @@
         "events": "0.9.1"
     },
     "output": {
-        "base.js": ["base.js"]
+        "base.js": "."
     },
     "tests": [
         "base"
