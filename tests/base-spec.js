@@ -2,6 +2,7 @@ define(function(require) {
 
   var Base = require('../src/base');
   var $ = require('$');
+  //var $ = require('https://a.alipayobjects.com/static/handy/zepto/0.9.0/zepto');
 
 
   describe('Base', function() {
@@ -18,6 +19,7 @@ define(function(require) {
       });
 
       expect(new Animal('Tom').name).toBe('Tom');
+      expect(new Animal('Tom2').getName()).toBe('Tom2');
 
       var Bird = Animal.extend({
         fly: function() {
@@ -195,7 +197,7 @@ define(function(require) {
       expect(c.get('o6')).toBe('c6');
     });
 
-    test('#49: deep clone bug in initAttrs', function() {
+    test('alipay/arale#49: deep clone bug in initAttrs', function() {
 
       var A = Base.extend({
         attrs: {
@@ -221,10 +223,7 @@ define(function(require) {
         attrs: {
           name: 'overlay',
           x: {
-            value: 0,
-            validator: function(val) {
-              return typeof val === 'number';
-            }
+            value: 0
           },
           y: {
             value: 0,
@@ -248,12 +247,6 @@ define(function(require) {
       overlay.set('y', '2px');
       expect(overlay.get('y')).toBe(2);
       expect(overlay.get('xy')).toEqual([10, 2]);
-
-      var errorCounter = 0;
-      overlay.set('x', 'str', { error: function() {
-        errorCounter++;
-      }});
-      expect(errorCounter).toBe(1);
     });
 
     test('attrs: inherited ones', function() {
@@ -459,10 +452,6 @@ define(function(require) {
       expect(panel.get('y')).toBe(100);
       expect(panel.get('size').width).toBe(200);
       expect(panel.get('size').height).toBe(100);
-
-      var panel2 = new Panel({ element: '#test' });
-      panel2.set('width', 200);
-      expect(panel2.element.width()).toBe(200);
     });
 
     test('aspect', function() {
