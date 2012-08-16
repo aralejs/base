@@ -27,17 +27,17 @@ var Dialog = Base.extend({
     ...
 });
 
-var a = new Dialog({ ... });
+var dialog = new Dialog({ ... });
 
-a.before('show', function() {
+dialog.before('show', function() {
     console.log(1);
 });
 
-a.after('show', function() {
+dialog.after('show', function() {
     console.log(3);
 });
 
-a.show(); // ==> 1, 2, 3
+dialog.show(); // ==> 1, 2, 3
 ```
 
 `callback` 函数在执行时，接收的参数与传给 `object[methodName]` 参数相同。如果传入了
@@ -52,6 +52,3 @@ a.show(); // ==> 1, 2, 3
 
 `callback` 函数在执行时，接收的参数是 `object[methodName]` 执行完成后的返回值。如果传入了
 `context` 参数，则 `callback` 里的 `this` 指向 `context`。
-
-
-返回 [Base 使用文档](../README.md)
