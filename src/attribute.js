@@ -13,9 +13,7 @@ define(function(require, exports) {
   exports.initAttrs = function(config, dataAttrsConfig) {
     // 合并来自 data-attr 的配置
     if (dataAttrsConfig) {
-      config = config ?
-          merge(dataAttrsConfig, config) :
-          dataAttrsConfig;
+      config = config ? merge(dataAttrsConfig, config) : dataAttrsConfig;
     }
 
     var specialProps = this.propsInAttrs || [];
@@ -39,7 +37,6 @@ define(function(require, exports) {
     this.attrs = attrs;
 
     // 对于有 setter 的属性，要用初始值 set 一下，以保证关联属性也一同初始化
-    // 这样还可以让 onXx 通过 setter 的方式支持更多形式
     setSetterAttrs(this, attrs, userValues);
 
     // Convert `on/before/afterXxx` config to event handler.
@@ -87,17 +84,6 @@ define(function(require, exports) {
 
       if (attr.readOnly) {
         throw new Error('This attribute is readOnly: ' + key);
-      }
-
-      // invoke validator
-      if (attr.validator) {
-        var ex = attr.validator.call(this, val, key);
-        if (ex !== true) {
-          if (options.error) {
-            options.error.call(this, ex);
-          }
-          continue;
-        }
       }
 
       // invoke setter
@@ -264,8 +250,7 @@ define(function(require, exports) {
       var key = specialProps[i];
 
       if (supplier.hasOwnProperty(key)) {
-        var val = supplier[key];
-        receiver[key] = isAttr2Prop ? receiver.get(key) : val;
+        receiver[key] = isAttr2Prop ? receiver.get(key) : supplier[key];
       }
     }
   }
@@ -323,8 +308,7 @@ define(function(require, exports) {
   }
 
 
-  var ATTR_SPECIAL_KEYS = ['value', 'getter', 'setter',
-    'validator', 'readOnly'];
+  var ATTR_SPECIAL_KEYS = ['value', 'getter', 'setter', 'readOnly'];
 
   // normalize `attrs` to
   //
@@ -332,7 +316,6 @@ define(function(require, exports) {
   //      value: 'xx',
   //      getter: fn,
   //      setter: fn,
-  //      validator: fn,
   //      readOnly: boolean
   //   }
   //
