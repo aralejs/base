@@ -1,14 +1,11 @@
 {
     "name": "base",
-    "version": "0.9.16",
+    "version": "1.0.0",
     "dependencies": {
-        "class": "0.9.2",
-        "events": "0.9.1"
+        "class": "1.0.0",
+        "events": "1.0.0"
     },
     "output": {
         "base.js": "."
-    },
-    "tests": [
-        "base"
-    ]
+    }
 }
