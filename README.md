@@ -1,16 +1,16 @@
 
 # Base
 
-Base 是一个基础类，提供 Class、Events、Attrs 和 Aspect 支持。
+Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。
 
 ---
 
 
 ## 模块依赖
 
- - [seajs](seajs/README.md)
- - [class](class/README.md)
- - [events](events/README.md)
+ - [seajs](http://seajs.org/)
+ - [class](http://aralejs.org/class/)
+ - [events](http://aralejs.org/events/)
 
 
 ## 使用说明
@@ -38,12 +38,12 @@ define(function(require, exports, module) {
 });
 ```
 
-具体用法请参考：[Class 使用文档](class/README.md)
+具体用法请参考：[Class 使用文档](http://aralejs.org/class/)
 
 
 ### Base 与 Class 的关系
 
-Base 是使用 `Class` 创建的一个基础类，默认混入了 `Events` 和 `Options` 支持：
+Base 是使用 `Class` 创建的一个基础类，默认混入了 `Events`、`Attribute` 等模块：
 
 ```js
 /* base.js */
@@ -70,20 +70,20 @@ define(function(require) {
 
 具体用法请参考：
 
-- [Events 使用文档](events/README.md)
-- [Attribute 使用文档](base/docs/attribute.md)
-- [Aspect 使用文档](base/docs/aspect.md)
+- [Events 使用文档](http://aralejs.org/events/)
+- [Attribute 使用文档](http://aralejs.org/base/docs/attribute.html)
+- [Aspect 使用文档](http://aralejs.org/base/docs/aspect.html)
 
 
 ## 测试用例
 
-- <http://aralejs.org/lib/base/tests/runner.html>
+- <http://aralejs.org/base/tests/runner.html>
 
 
 ## 交流讨论
 
 欢迎创建
-[GitHub Issue](https://github.com/alipay/arale/issues/new)
+[GitHub Issue](https://github.com/aralejs/base/issues/new)
 来提交反馈。
 
 已有议题：
