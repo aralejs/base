@@ -1,34 +1,31 @@
 define(function(require, exports, module) {
 
-    // Base
-    // ---------
-    // Base 是一个基础类，提供 Class、Events、Attrs 和 Aspect 支持。
+  // Base
+  // ---------
+  // Base 是一个基础类，提供 Class、Events、Attrs 和 Aspect 支持。
+
+  var Class = require('class');
+  var Events = require('events');
+  var Aspect = require('./aspect');
+  var Attribute = require('./attribute');
 
 
-    var Class = require('class');
-    var Events = require('events');
-    var Aspect = require('./aspect');
-    var Attribute = require('./attribute');
+  module.exports = Class.create({
+    Implements: [Events, Aspect, Attribute],
 
+    initialize: function(config) {
+      this.initAttrs(config);
+    },
 
-    var Base = Class.create({
-        Implements: [Events, Aspect, Attribute],
+    destroy: function() {
+      this.off();
 
-        initialize: function(config) {
-            this.initAttrs(config);
-        },
-
-        destroy: function() {
-            this.off();
-
-            for (var p in this) {
-                if (this.hasOwnProperty(p)) {
-                    delete this[p];
-                }
-            }
+      for (var p in this) {
+        if (this.hasOwnProperty(p)) {
+          delete this[p];
         }
-    });
-
-    module.exports = Base;
+      }
+    }
+  });
 
 });

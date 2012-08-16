@@ -1,4 +1,4 @@
-define("#base/0.9.16/aspect-debug", [], function(require, exports) {
+define("#base/1.0.0/aspect-debug", [], function(require, exports) {
 
     // Aspect
     // ---------------------
@@ -70,7 +70,7 @@ define("#base/0.9.16/aspect-debug", [], function(require, exports) {
 });
 
 
-define("#base/0.9.16/attribute-debug", [], function(require, exports) {
+define("#base/1.0.0/attribute-debug", [], function(require, exports) {
 
     // Attribute
     // -----------------
@@ -519,15 +519,15 @@ define("#base/0.9.16/attribute-debug", [], function(require, exports) {
 });
 
 
-define("#base/0.9.16/base-debug", ["./aspect-debug", "./attribute-debug", "#events/0.9.1/events-debug", "#class/0.9.2/class-debug"], function(require, exports, module) {
+define("#base/1.0.0/base-debug", ["./aspect-debug", "./attribute-debug", "#class/1.0.0/class-debug", "#events/1.0.0/events-debug"], function(require, exports, module) {
 
     // Base
     // ---------
     // Base 是一个基础类，提供 Class、Events、Attrs 和 Aspect 支持。
 
 
-    var Class = require('#class/0.9.2/class-debug');
-    var Events = require('#events/0.9.1/events-debug');
+    var Class = require('#class/1.0.0/class-debug');
+    var Events = require('#events/1.0.0/events-debug');
     var Aspect = require('./aspect-debug');
     var Attribute = require('./attribute-debug');
 
