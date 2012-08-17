@@ -184,7 +184,10 @@ define(function(require, exports) {
           value = value.slice();
         }
         else if (isPlainObject(value)) {
-          value = merge(receiver[key] || {}, value);
+          var prev = receiver[key];
+          isPlainObject(prev) || (prev = {});
+
+          value = merge(prev, value);
         }
 
         receiver[key] = value;
