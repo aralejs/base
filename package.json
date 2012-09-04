@@ -7,5 +7,6 @@
     },
     "output": {
         "base.js": "."
-    }
+    },
+    "tests": ["base"]
 }

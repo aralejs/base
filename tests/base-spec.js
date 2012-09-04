@@ -595,6 +595,31 @@ define(function(require) {
 
     });
 
+    test('share instance', function() {
+      var M = Base.extend({
+        attrs: {
+          date: {
+            setter: function(val) {
+              return val;
+            }
+          }
+        },
+        initialize: function(o) {
+          this.set('date', 2);
+        }
+      });
+
+      var m1 = new M();
+      var m2 = new M();
+
+      expect(m1.get('date')).toBe(2);
+      expect(m2.get('date')).toBe(2);
+
+      m1.set('date', 4);
+      expect(m1.get('date')).toBe(4);
+      expect(m2.get('date')).toBe(2);
+    });
+
   });
 
 });
