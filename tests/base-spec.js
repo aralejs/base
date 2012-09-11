@@ -581,7 +581,7 @@ define(function(require) {
             return {
               a: 1,
               v: val
-            }
+            };
           }
         },
 
@@ -595,6 +595,21 @@ define(function(require) {
 
     });
 
-  });
+    test('attrs can not be {value:1} #3', function() {
+      var A = Base.extend({
+        attrs: {
+            source: null
+        }
+      });
 
+      var a = new A({
+          source: {
+              value: 'a'
+          }
+      });
+
+      expect(a.get('source')).toEqual({value: 'a'});
+    });
+
+  });
 });
