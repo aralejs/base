@@ -8,5 +8,5 @@
     "output": {
         "base.js": "."
     },
-    "tests": ['base']
+    "tests": ["base"]
 }
