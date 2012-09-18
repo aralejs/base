@@ -52,3 +52,4 @@ dialog.show(); // ==> 1, 2, 3
 
 `callback` 函数在执行时，接收的参数是 `object[methodName]` 执行完成后的返回值。如果传入了
 `context` 参数，则 `callback` 里的 `this` 指向 `context`。
+
