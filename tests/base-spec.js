@@ -5,7 +5,7 @@ define(function(require) {
   //var $ = require('https://a.alipayobjects.com/static/handy/zepto/0.9.0/zepto');
 
 
-  describe('Base', function() {
+  xdescribe('Base', function() {
 
     test('normal usage', function() {
 
@@ -595,18 +595,19 @@ define(function(require) {
 
     });
 
-    test('share instance', function() {
+    test('#2 share instance', function() {
+
       var M = Base.extend({
+
         attrs: {
-          date: {
-            setter: function(val) {
-              return val;
-            }
-          }
+          date: 2
         },
-        initialize: function(o) {
+
+        initialize: function() {
+          M.superclass.initialize.call(this);
           this.set('date', 2);
         }
+
       });
 
       var m1 = new M();
@@ -618,9 +619,10 @@ define(function(require) {
       m1.set('date', 4);
       expect(m1.get('date')).toBe(4);
       expect(m2.get('date')).toBe(2);
+
     });
 
-    test('attrs can not be {value:1} #3', function() {
+    test('#3 attrs can not be {value: 1}', function() {
       var A = Base.extend({
         attrs: {
             source: null
@@ -636,4 +638,5 @@ define(function(require) {
     });
 
   });
+
 });
