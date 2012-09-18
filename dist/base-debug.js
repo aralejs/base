@@ -214,6 +214,7 @@ define("#base/1.0.1/attribute-debug", [], function(require, exports) {
   // -------
 
   var toString = Object.prototype.toString;
+  var hasOwn = Object.prototype.hasOwnProperty;
 
   var isArray = Array.isArray || function(val) {
     return toString.call(val) === '[object Array]';
@@ -227,14 +228,37 @@ define("#base/1.0.1/attribute-debug", [], function(require, exports) {
     return toString.call(val) === '[object Function]';
   }
 
+  function isWindow(o) {
+    return o != null && o == o.window;
+  }
+
   function isPlainObject(o) {
-    return o &&
-      // 排除 boolean/string/number/function 等
-      // 标准浏览器下，排除 window 等非 JS 对象
-      // 注：ie8- 下，toString.call(window 等对象)  返回 '[object Object]'
-        toString.call(o) === '[object Object]' &&
-      // ie8- 下，排除 window 等非 JS 对象
-        ('isPrototypeOf' in o);
+    // Must be an Object.
+    // Because of IE, we also have to check the presence of the constructor
+    // property. Make sure that DOM nodes and window objects don't
+    // pass through, as well
+    if (!o || toString.call(o) !== "[object Object]" ||
+        o.nodeType || isWindow(o)) {
+      return false;
+    }
+
+    try {
+      // Not own constructor property must be Object
+      if (o.constructor &&
+          !hasOwn.call(o, "constructor") &&
+          !hasOwn.call(o.constructor.prototype, "isPrototypeOf")) {
+        return false;
+      }
+    } catch (e) {
+      // IE8,9 Will throw exceptions on certain host objects #9897
+      return false;
+    }
+
+    // Own properties are enumerated firstly, so to speed up,
+    // if last one is own, then all properties are own.
+    for (var key in o) {}
+
+    return key === undefined || hasOwn.call(o, key);
   }
 
   function isEmptyObject(o) {
