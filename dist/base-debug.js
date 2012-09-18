@@ -1,4 +1,4 @@
-define("#base/1.0.0/aspect-debug", [], function(require, exports) {
+define("#base/1.0.1/aspect-debug", [], function(require, exports) {
 
   // Aspect
   // ---------------------
@@ -70,7 +70,7 @@ define("#base/1.0.0/aspect-debug", [], function(require, exports) {
 });
 
 
-define("#base/1.0.0/attribute-debug", [], function(require, exports) {
+define("#base/1.0.1/attribute-debug", [], function(require, exports) {
 
   // Attribute
   // -----------------
@@ -83,21 +83,21 @@ define("#base/1.0.0/attribute-debug", [], function(require, exports) {
   // 负责 attributes 的初始化
   // attributes 是与实例相关的状态信息，可读可写，发生变化时，会自动触发相关事件
   exports.initAttrs = function(config, dataAttrsConfig) {
+
     // 合并来自 data-attr 的配置
     if (dataAttrsConfig) {
       config = config ? merge(dataAttrsConfig, config) : dataAttrsConfig;
     }
 
-    var specialProps = this.propsInAttrs || [];
-    var attrs, inheritedAttrs, userValues;
-
     // Get all inherited attributes.
-    inheritedAttrs = getInheritedAttrs(this, specialProps);
-    attrs = merge({}, inheritedAttrs);
+    var specialProps = this.propsInAttrs || [];
+    var inheritedAttrs = getInheritedAttrs(this, specialProps);
+    var attrs = merge({}, inheritedAttrs);
+    var userValues;
 
     // Merge user-specific attributes from config.
     if (config) {
-      userValues = normalize(config);
+      userValues = normalize(config, true);
       merge(attrs, userValues);
     }
 
@@ -394,7 +394,7 @@ define("#base/1.0.0/attribute-debug", [], function(require, exports) {
   //      readOnly: boolean
   //   }
   //
-  function normalize(attrs) {
+  function normalize(attrs, isUserValue) {
     // clone it
     attrs = merge({}, attrs);
 
@@ -402,6 +402,7 @@ define("#base/1.0.0/attribute-debug", [], function(require, exports) {
       var attr = attrs[key];
 
       if (isPlainObject(attr) &&
+          !isUserValue &&
           hasOwnProperties(attr, ATTR_SPECIAL_KEYS)) {
         continue;
       }
@@ -505,7 +506,7 @@ define("#base/1.0.0/attribute-debug", [], function(require, exports) {
 });
 
 
-define("#base/1.0.0/base-debug", ["./aspect-debug", "./attribute-debug", "#class/1.0.0/class-debug", "#events/1.0.0/events-debug"], function(require, exports, module) {
+define("#base/1.0.1/base-debug", ["./aspect-debug", "./attribute-debug", "#class/1.0.0/class-debug", "#events/1.0.0/events-debug"], function(require, exports, module) {
 
   // Base
   // ---------
