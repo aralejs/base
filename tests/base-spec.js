@@ -639,6 +639,20 @@ define(function(require) {
       expect(a.get('source')).toEqual({value: 'a'});
     });
 
+    test('#4 the merging bug of jQuery-like object', function() {
+      var T = Base.extend({
+        attrs: {
+          baseElement: { _id: 1 }
+        }
+      });
+
+      var t = new T({
+        baseElement: $({})
+      });
+
+      expect(t.get('baseElement')._id).toBe(undefined);
+    });
+
   });
 
 });
