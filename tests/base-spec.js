@@ -5,7 +5,7 @@ define(function(require) {
   //var $ = require('https://a.alipayobjects.com/static/handy/zepto/0.9.0/zepto');
 
 
-  xdescribe('Base', function() {
+  describe('Base', function() {
 
     test('normal usage', function() {
 
@@ -622,12 +622,14 @@ define(function(require) {
 
     });
 
-    test('#3 attrs can not be {value: 1}', function() {
+    test('#3 attrs can not be { value: 1 }', function() {
+
       var A = Base.extend({
         attrs: {
             source: null
         }
       });
+
       var a = new A({
         source: {
             value: 'a'
