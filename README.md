@@ -67,18 +67,3 @@ define(function(require) {
 - [Attribute 使用文档](http://aralejs.org/base/docs/attribute.html)
 - [Aspect 使用文档](http://aralejs.org/base/docs/aspect.html)
 
-
-## 测试用例
-
-- <http://aralejs.org/base/tests/runner.html>
-
-
-## 交流讨论
-
-欢迎创建
-[GitHub Issue](https://github.com/aralejs/base/issues/new)
-来提交反馈。
-
-已有议题：
-
-- [Base 中默认混入 Events/Options 等是否合适](https://github.com/alipay/arale/issues/24)
