@@ -7,7 +7,7 @@
   "homepage": "http://aralejs.org/base",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aralejs/base"
+    "url": "https://github.com/aralejs/base.git"
   },
   "bugs": {
     "url": "https://github.com/aralejs/base/issues"
