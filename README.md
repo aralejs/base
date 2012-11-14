@@ -3,6 +3,8 @@
 
 ---
 
+[![Build Status](https://secure.travis-ci.org/aralejs/base.png)](https://travis-ci.org/aralejs/base)
+
 Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。
 
 ---
