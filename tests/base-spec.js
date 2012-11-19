@@ -2,12 +2,11 @@ define(function(require) {
 
   var Base = require('../src/base');
   var $ = require('$');
-  //var $ = require('https://a.alipayobjects.com/static/handy/zepto/0.9.0/zepto');
-
+  var expect = chai.expect;
 
   describe('Base', function() {
 
-    test('normal usage', function() {
+    it('normal usage', function() {
 
       var Animal = Base.extend({
         initialize: function(name) {
@@ -18,8 +17,8 @@ define(function(require) {
         }
       });
 
-      expect(new Animal('Tom').name).toBe('Tom');
-      expect(new Animal('Tom2').getName()).toBe('Tom2');
+      expect(new Animal('Tom').name).to.equal('Tom');
+      expect(new Animal('Tom2').getName()).to.equal('Tom2');
 
       var Bird = Animal.extend({
         fly: function() {
@@ -28,11 +27,11 @@ define(function(require) {
       });
 
       var bird = new Bird('Twitter');
-      expect(bird.name).toBe('Twitter');
-      expect(bird.fly()).toBe('I can fly');
+      expect(bird.name).to.equal('Twitter');
+      expect(bird.fly()).to.equal('I can fly');
     });
 
-    test('events supporting', function() {
+    it('events supporting', function() {
       var counter = 0;
 
       var Bird = Base.extend({
@@ -49,15 +48,15 @@ define(function(require) {
         counter++;
       });
 
-      expect(counter).toBe(0);
+      expect(counter).to.equal(0);
       bird.fly();
-      expect(counter).toBe(1);
+      expect(counter).to.equal(1);
 
       bird.off().fly();
-      expect(counter).toBe(1);
+      expect(counter).to.equal(1);
     });
 
-    test('attrs merging', function() {
+    it('attrs merging', function() {
 
       var Widget = Base.extend({
         attrs: {
@@ -79,14 +78,14 @@ define(function(require) {
         }
       });
 
-      expect(myWidget.get('color')).toBe('#f00');
-      expect(myWidget.get('size').width).toBe(200);
-      expect(myWidget.get('size').height).toBe(100);
-      expect(myWidget.get('position').top).toBe(50);
-      expect(myWidget.get('position').left).toBe(100);
+      expect(myWidget.get('color')).to.equal('#f00');
+      expect(myWidget.get('size').width).to.equal(200);
+      expect(myWidget.get('size').height).to.equal(100);
+      expect(myWidget.get('position').top).to.equal(50);
+      expect(myWidget.get('position').left).to.equal(100);
     });
 
-    test('attrs cloning', function() {
+    it('attrs cloning', function() {
 
       var Widget = Base.extend({
         attrs: {
@@ -108,11 +107,11 @@ define(function(require) {
         size: mySize
       });
 
-      expect(myWidget.get('color')).toBe('#fff');
-      expect(myWidget.get('size') === mySize).toBe(false);
+      expect(myWidget.get('color')).to.equal('#fff');
+      expect(myWidget.get('size') === mySize).to.equal(false);
     });
 
-    test('events declaration in config', function() {
+    it('events declaration in config', function() {
       var counter = 0;
 
       var A = Base.extend({
@@ -149,14 +148,14 @@ define(function(require) {
       });
 
       a.show();
-      expect(counter).toBe(3);
+      expect(counter).to.equal(3);
 
       counter = 0;
       a.set('color', '#0f0');
-      expect(counter).toBe(1);
+      expect(counter).to.equal(1);
     });
 
-    test('attrs from ancestors', function() {
+    it('attrs from ancestors', function() {
 
       var Person = Base.extend({
         attrs: {
@@ -189,15 +188,15 @@ define(function(require) {
 
       var c = new Child({ o4: 'o4', o2: 'o2' });
 
-      expect(c.get('o1')).toBe('p1');
-      expect(c.get('o2')).toBe('o2');
-      expect(c.get('o3')).toBe('m1');
-      expect(c.get('o4')).toBe('o4');
-      expect(c.get('o5')).toBe('c2');
-      expect(c.get('o6')).toBe('c6');
+      expect(c.get('o1')).to.equal('p1');
+      expect(c.get('o2')).to.equal('o2');
+      expect(c.get('o3')).to.equal('m1');
+      expect(c.get('o4')).to.equal('o4');
+      expect(c.get('o5')).to.equal('c2');
+      expect(c.get('o6')).to.equal('c6');
     });
 
-    test('alipay/arale#49: deep clone bug in initAttrs', function() {
+    it('alipay/arale#49: deep clone bug in initAttrs', function() {
 
       var A = Base.extend({
         attrs: {
@@ -211,13 +210,13 @@ define(function(require) {
       var attrs = a.attrs;
       attrs.array.value.push(4);
 
-      expect(attrs.array.value.length).toBe(4);
-      expect(A.prototype.attrs.array.length).toBe(3);
-      expect(attrs.element.value).toBe(document.body);
-      expect(attrs.point.value).toBe(null);
+      expect(attrs.array.value.length).to.equal(4);
+      expect(A.prototype.attrs.array.length).to.equal(3);
+      expect(attrs.element.value).to.equal(document.body);
+      expect(attrs.point.value).to.equal(null);
     });
 
-    test('attrs: normal usage', function() {
+    it('attrs: normal usage', function() {
 
       var Overlay = Base.extend({
         attrs: {
@@ -241,15 +240,15 @@ define(function(require) {
 
       var overlay = new Overlay({ x: 10 });
 
-      expect(overlay.get('name')).toBe('overlay');
-      expect(overlay.get('x')).toBe(10);
+      expect(overlay.get('name')).to.equal('overlay');
+      expect(overlay.get('x')).to.equal(10);
 
       overlay.set('y', '2px');
-      expect(overlay.get('y')).toBe(2);
-      expect(overlay.get('xy')).toEqual([10, 2]);
+      expect(overlay.get('y')).to.equal(2);
+      expect(overlay.get('xy')).to.eql([10, 2]);
     });
 
-    test('attrs: inherited ones', function() {
+    it('attrs: inherited ones', function() {
 
       // userValue 优先
       var A = Base.extend({
@@ -265,7 +264,7 @@ define(function(require) {
       });
 
       var b = new B({ x: 'x3' });
-      expect(b.get('x')).toBe('x3');
+      expect(b.get('x')).to.equal('x3');
 
 
       // 仅覆盖 setter
@@ -280,13 +279,13 @@ define(function(require) {
       });
 
       var b2 = new B2();
-      expect(b2.get('x')).toBe('x');
+      expect(b2.get('x')).to.equal('x');
       b2.set('x', 'x3');
-      expect(b2.get('x')).toBe('x2');
+      expect(b2.get('x')).to.equal('x2');
 
     });
 
-    test('related attrs', function() {
+    it('related attrs', function() {
 
       var O = Base.extend({
         attrs: {
@@ -308,17 +307,17 @@ define(function(require) {
         xy: [10, 20]
       });
 
-      expect(o.get('x')).toBe(10);
-      expect(o.get('y')).toBe(20);
-      expect(o.get('xy')).toEqual([10, 20]);
+      expect(o.get('x')).to.equal(10);
+      expect(o.get('y')).to.equal(20);
+      expect(o.get('xy')).to.eql([10, 20]);
 
       o = new O({
         x: 30
       });
 
-      expect(o.get('x')).toBe(30);
-      expect(o.get('y')).toBe(0);
-      expect(o.get('xy')).toEqual([30, 0]);
+      expect(o.get('x')).to.equal(30);
+      expect(o.get('y')).to.equal(0);
+      expect(o.get('xy')).to.eql([30, 0]);
 
       // 同时设置时，以 xy 的为准
       o = new O({
@@ -327,12 +326,12 @@ define(function(require) {
         y: 30
       });
 
-      expect(o.get('x')).toBe(10);
-      expect(o.get('y')).toBe(20);
-      expect(o.get('xy')).toEqual([10, 20]);
+      expect(o.get('x')).to.equal(10);
+      expect(o.get('y')).to.equal(20);
+      expect(o.get('xy')).to.eql([10, 20]);
     });
 
-    test('related attrs change events', function() {
+    it('related attrs change events', function() {
       var counter = 0;
 
       function incr() {
@@ -365,15 +364,15 @@ define(function(require) {
         y: 30
       });
 
-      expect(o.get('x')).toBe(10);
-      expect(o.get('y')).toBe(20);
-      expect(o.get('xy')).toEqual([10, 20]);
+      expect(o.get('x')).to.equal(10);
+      expect(o.get('y')).to.equal(20);
+      expect(o.get('xy')).to.eql([10, 20]);
 
       o.change();
-      expect(counter).toBe(0);
+      expect(counter).to.equal(0);
     });
 
-    test('attrs change events', function() {
+    it('attrs change events', function() {
       var counter = 0;
       var counterY = 0;
 
@@ -384,8 +383,8 @@ define(function(require) {
         },
 
         _onChangeY: function(val, prev) {
-          expect(prev).toBe(1);
-          expect(val).toBe(2);
+          expect(prev).to.equal(1);
+          expect(val).to.equal(2);
           counterY++;
         }
 
@@ -395,32 +394,32 @@ define(function(require) {
 
       a.on('change:x', function(val, prev, key) {
         if (counter === 0) {
-          expect(prev).toBe(2);
-          expect(val).toBe(3);
+          expect(prev).to.equal(2);
+          expect(val).to.equal(3);
         }
-        expect(key).toBe('x');
-        expect(this).toBe(a);
+        expect(key).to.equal('x');
+        expect(this).to.equal(a);
 
         counter++;
       });
 
       a.set('x', 3);
       a.set('x', 3);
-      expect(counter).toBe(1);
+      expect(counter).to.equal(1);
 
       a.set('x', 4, { silent: true });
-      expect(counter).toBe(1);
+      expect(counter).to.equal(1);
 
       a.set('x', 5);
-      expect(counter).toBe(2);
+      expect(counter).to.equal(2);
 
       a.set('y', 2);
-      expect(counterY).toBe(1);
+      expect(counterY).to.equal(1);
       a.set('y', 3, { silent: true });
-      expect(counterY).toBe(1);
+      expect(counterY).to.equal(1);
     });
 
-    test('example in attribute.md', function() {
+    it('example in attribute.md', function() {
 
       var Panel = Base.extend({
         attrs: {
@@ -449,12 +448,12 @@ define(function(require) {
         }
       });
 
-      expect(panel.get('y')).toBe(100);
-      expect(panel.get('size').width).toBe(200);
-      expect(panel.get('size').height).toBe(100);
+      expect(panel.get('y')).to.equal(100);
+      expect(panel.get('size').width).to.equal(200);
+      expect(panel.get('size').height).to.equal(100);
     });
 
-    test('aspect', function() {
+    it('aspect', function() {
       var counter = 1;
 
       var A = Base.extend({
@@ -466,19 +465,19 @@ define(function(require) {
       var a = new A();
 
       a.before('xxx', function(n, m) {
-        expect(n).toBe(1);
-        expect(m).toBe(2);
-        expect(this).toBe(a);
+        expect(n).to.equal(1);
+        expect(m).to.equal(2);
+        expect(this).to.equal(a);
       });
 
       a.after('xxx', function(ret) {
-        expect(ret).toBe(4);
-        expect(this).toBe(a);
+        expect(ret).to.equal(4);
+        expect(this).to.equal(a);
         counter++;
       });
 
       a.xxx(1, 2);
-      expect(counter).toBe(5);
+      expect(counter).to.equal(5);
 
 
       // invalid
@@ -490,10 +489,10 @@ define(function(require) {
         counter++;
       }
 
-      expect(counter).toBe(2);
+      expect(counter).to.equal(2);
     });
 
-    test('test change method', function() {
+    it('test change method', function() {
       var counter = 0;
 
       var A = Base.extend({
@@ -519,35 +518,35 @@ define(function(require) {
 
       counter = 0;
       var a = new A();
-      expect(counter).toBe(0);
+      expect(counter).to.equal(0);
 
       // 初始化后，无 changedAttrs
       a.change();
-      expect(counter).toBe(0);
+      expect(counter).to.equal(0);
 
 
       counter = 0;
       var a2 = new A({ a: 2 });
-      expect(counter).toBe(0);
+      expect(counter).to.equal(0);
 
       counter = 0;
       a2.set('a', 2);
-      expect(counter).toBe(0);
+      expect(counter).to.equal(0);
 
       counter = 0;
       a2.set('a', 3);
-      expect(counter).toBe(1);
+      expect(counter).to.equal(1);
 
       counter = 0;
       var a3 = new A({ a: 1, b: 2, c: 3 });
-      expect(counter).toBe(0);
+      expect(counter).to.equal(0);
 
       counter = 0;
       a3.set({ a: 2, b: 3, c: 4 });
-      expect(counter).toBe(3);
+      expect(counter).to.equal(3);
     });
 
-    test('after/before support binding multiple methodNames at once', function() {
+    it('after/before support binding multiple methodNames at once', function() {
       var counter = 0;
 
       function incr() {
@@ -567,12 +566,12 @@ define(function(require) {
       a.after('hide show', incr);
 
       a.show();
-      expect(counter).toBe(2);
+      expect(counter).to.equal(2);
       a.hide();
-      expect(counter).toBe(4);
+      expect(counter).to.equal(4);
     });
 
-    test('special properties getter', function() {
+    it('special properties getter', function() {
 
       var T = Base.extend({
 
@@ -590,12 +589,12 @@ define(function(require) {
 
       var t = new T();
 
-      expect(t.model.a).toBe(1);
-      expect(t.model.v).toBe(undefined);
+      expect(t.model.a).to.equal(1);
+      expect(t.model.v).to.equal(undefined);
 
     });
 
-    test('#2 share instance', function() {
+    it('#2 share instance', function() {
 
       var M = Base.extend({
 
@@ -613,16 +612,16 @@ define(function(require) {
       var m1 = new M();
       var m2 = new M();
 
-      expect(m1.get('date')).toBe(2);
-      expect(m2.get('date')).toBe(2);
+      expect(m1.get('date')).to.equal(2);
+      expect(m2.get('date')).to.equal(2);
 
       m1.set('date', 4);
-      expect(m1.get('date')).toBe(4);
-      expect(m2.get('date')).toBe(2);
+      expect(m1.get('date')).to.equal(4);
+      expect(m2.get('date')).to.equal(2);
 
     });
 
-    test('#3 attrs can not be { value: 1 }', function() {
+    it('#3 attrs can not be { value: 1 }', function() {
 
       var A = Base.extend({
         attrs: {
@@ -636,10 +635,10 @@ define(function(require) {
         }
       });
 
-      expect(a.get('source')).toEqual({value: 'a'});
+      expect(a.get('source')).to.eql({value: 'a'});
     });
 
-    test('#4 the merging bug of jQuery-like object', function() {
+    it('#4 the merging bug of jQuery-like object', function() {
       var T = Base.extend({
         attrs: {
           baseElement: { _id: 1 }
@@ -650,7 +649,7 @@ define(function(require) {
         baseElement: $({})
       });
 
-      expect(t.get('baseElement')._id).toBe(undefined);
+      expect(t.get('baseElement')._id).to.equal(undefined);
     });
 
   });
