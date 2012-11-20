@@ -2,7 +2,6 @@ define(function(require) {
 
   var Base = require('../src/base');
   var $ = require('$');
-  var expect = chai.expect;
 
   describe('Base', function() {
 
