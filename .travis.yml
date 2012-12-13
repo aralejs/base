@@ -7,16 +7,14 @@ notifications:
 node_js:
   - 0.8
 
-before_script:
-  - git clone https://github.com/aralejs/liquidluck-theme-arale2.git ../liquidluck-theme-arale2
-  - cp -r ../liquidluck-theme-arale2/static tests/
-  - mkdir tests/templates
-  - cp ../liquidluck-theme-arale2/templates/mocha-runner.html tests/templates/runner.html
-  - cp -r ../liquidluck-theme-arale2/test-travis.js tests/
-  - nohup node tests/test-travis.js &
-
 install: 
-  - npm install spm node-static swig mocha-phantomjs
-  - spm install
+  - npm install nico
+  - npm install spm
+  - npm install mocha-phantomjs
+  - ./node_modules/.bin/spm install
 
-script: mocha-phantomjs http://127.0.0.1:8000/tests/runner.html
+before_script:
+  - git clone https://github.com/aralejs/nico-arale.git _theme
+  - nohup ./node_modules/.bin/nico server -q -C _theme/nico.js debug &
+
+script: ./node_modules/.bin/mocha-phantomjs http://127.0.0.1:8000/tests/runner.html
