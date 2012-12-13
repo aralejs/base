@@ -11,10 +11,10 @@ install:
   - npm install nico
   - npm install spm
   - npm install mocha-phantomjs
+  - spm install
 
 before_script:
-  - spm install
   - git clone https://github.com/aralejs/nico-arale.git _theme
   - nohup nico server -q -C _theme/nico.js debug &
 
-script: mocha-phantomjs http://127.0.0.1:8000/tests/runner.html
+script: mocha-phantomjs --timeout=0 http://127.0.0.1:8000/tests/runner.html
