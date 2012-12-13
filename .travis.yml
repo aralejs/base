@@ -11,10 +11,12 @@ install:
   - npm install nico
   - npm install spm
   - npm install phantomjs
+  - npm install node-static
   - spm install
 
 before_script:
   - git clone https://github.com/aralejs/nico-arale.git _theme
-  - nohup nico server -q -C _theme/nico.js debug &
+  - nico build -C _theme/nico.js
+  - nohup node _theme/test-travis.js &
 
 script: phantomjs http://127.0.0.1:8000/tests/runner.html
