@@ -1,4 +1,4 @@
-define("#base/1.0.1/aspect-debug", [], function(require, exports) {
+define("arale/base/1.0.1/aspect-debug", [], function(require, exports) {
 
   // Aspect
   // ---------------------
@@ -69,8 +69,7 @@ define("#base/1.0.1/aspect-debug", [], function(require, exports) {
 
 });
 
-
-define("#base/1.0.1/attribute-debug", [], function(require, exports) {
+define("arale/base/1.0.1/attribute-debug", [], function(require, exports) {
 
   // Attribute
   // -----------------
@@ -529,15 +528,14 @@ define("#base/1.0.1/attribute-debug", [], function(require, exports) {
 
 });
 
-
-define("#base/1.0.1/base-debug", ["./aspect-debug", "./attribute-debug", "#class/1.0.0/class-debug", "#events/1.0.0/events-debug"], function(require, exports, module) {
+define("arale/base/1.0.1/base-debug", ["./aspect-debug", "./attribute-debug", "arale/class/1.0.0/class-debug", "arale/events/1.0.0/events-debug"], function(require, exports, module) {
 
   // Base
   // ---------
   // Base 是一个基础类，提供 Class、Events、Attrs 和 Aspect 支持。
 
-  var Class = require('#class/1.0.0/class-debug');
-  var Events = require('#events/1.0.0/events-debug');
+  var Class = require('arale/class/1.0.0/class-debug');
+  var Events = require('arale/events/1.0.0/events-debug');
   var Aspect = require('./aspect-debug');
   var Attribute = require('./attribute-debug');
 

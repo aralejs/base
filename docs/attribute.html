@@ -1,135 +1,148 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html lang="zh">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-    <title>Base - Attribute 使用文档</title><link rel="stylesheet" href="http://alipay.github.com/liquidluck-theme-arale/assets/app.min.css">
-    <link rel="shortcut icon" href="http://alipay.github.com/liquidluck-theme-arale/assets/favicon.ico" type="image/x-icon" />
-    <script src="http://seajs.org/dist/sea.js"></script>
-    <script src="http://alipay.github.com/liquidluck-theme-arale/tools/arale-helper.js"></script>
+    <title>Arale - Attribute 使用文档</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.1.0-rc" />
+    <link type="image/x-icon" href="../static/css/favicon.ico" rel="icon">
+    <link rel="stylesheet" href="../static/css/normalize.css" />
+    <link rel="stylesheet" href="../static/css/site.css" />
+    <link rel="stylesheet" href="../static/css/solarized.css" />
+    <script src="https://a.alipayobjects.com/seajs/1.2.1/sea.js"></script>
+    <script src="../static/js/arale-helper.js"></script>
+    <script src="../static/js/site.js"></script>
+<script>
+  (function() {
+    var data;
+    seajs._package = data = {"name":"base","root":"arale","description":"Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。","version":"1.0.1","tag":"infrastructure","homepage":"http://aralejs.org/base","repository":{"type":"git","url":"https://github.com/aralejs/base.git"},"bugs":{"url":"https://github.com/aralejs/base/issues"},"dependencies":{"class":"arale/class/1.0.0/class","events":"arale/events/1.0.0/events"},"tests":["base"],"output":{"base.js":"."}}
+    data.dependencies && (delete data.dependencies['$'])
+    data.devDependencies && (delete data.devDependencies['$'])
+
+    seajs.config({ alias: data.dependencies })
+    seajs.config({ alias: data.devDependencies })
+    seajs.config({ alias: {"aspect":"../src/aspect.js","attribute":"../src/attribute.js","base":"../src/base.js"} })
+  })();
+</script>
     <!--[if lt IE 9]>
-      <script src="http://alipay.github.com/liquidluck-theme-arale/assets/html5shiv.js"></script>
+    <script src="../static/js/html5shiv.js"></script>
     <![endif]-->
   </head>
   <body>
-    <header id="header">
-      <div class="container">
-        <a title="Home" class="icon-home" href="/" id="logo">Arale</a>
-        <div class="wrapper fn-clear">
-          
-          <nav class="global-nav" role="navigation">
-            <ul class="fn-clear">
-              <li class="developer-guides"><a href="/developer-guides/">开发指南</a></li>
-              <li class="user-guides"><a href="/components/">组件文档</a> • <a style="padding-left:0;" href="/mapping.html">Map</a></li>
-            </ul>
-          </nav>
-          <nav class="top-nav" role="navigation">
-            <ul class="fn-clear">
-              <li class="first"><a target="_blank" href="http://seajs.org">SeaJS</a></li>
-              <li class="last"><a target="_blank" href="https://github.com/seajs/spm/wiki">SPM</a></li>
-            </ul>
-          </nav>
-          
-        </div>
-      </div>
-    </header>
+    <div id="body-wrapper">
+      <aside id="sidebar-wrapper">
+        <h1><a href="../">Base</a><sup class="package-root"><a href="/">arale</a></sup></h1>
+        <p class="version">当前版本：<span>1.0.1</span></p>
+        <p class="description">Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。</p>
+        <a class="source" href="https://github.com/aralejs/base.git" target="_blank">View the Project</a>
+        <ul id="navigation" role="navigation">
+          <li><a href="../">文档</a></li>
+          <li><a href="../tests/runner.html" target="_blank">用例</a></li>
+          <li><a href="https://github.com/aralejs/base/issues" target="_blank">讨论</a></li>
+        </ul>
+        
+<ol id="sidenav">
+  <li><a href="../docs/aspect.html">Aspect 使用文档</a></li>
+  <li><a href="../docs/attribute.html">Attribute 使用文档</a></li>
+  <li><a href="../">Base</a></li>
+</ol>
 
-    <div id="main">
-      <div class="container fn-clear">
-<div class="markdown-body">
-  <h1 class="entry-title"><a id="back-to-module" href="../">Base</a> - Attribute 使用文档</h1>
-  <blockquote>
-<p>提供基本的属性添加、获取、移除等功能。</p>
-</blockquote>
+      </aside>
+      <div id="content-wrapper">
+        <div id="content">
+<article class="hentry">
+  <h1 class="entry-title">Attribute 使用文档</h1>
+  <div class="entry-content">
+    <p>提供基本的属性添加、获取、移除等功能。</p>
 
-<h2 id="toc_0">使用说明</h2>
+<hr/>
+<h2 id="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">使用说明</h2>
 <p>基于 <code>Base.extend</code> 创建的类，会自动添加上 <code>Attribute</code> 提供的功能。例子：</p>
-<div class="highlight"><pre><span class="cm">/* panel.js */</span>
-<span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">Base</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;base&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><code class="javascript"><span class="comment">/* panel.js */</span>
+define(<span class="keyword">function</span>(require, exports, module) {
+    <span class="keyword">var</span> Base = require(<span class="string">'base'</span>);
+    <span class="keyword">var</span> $ = require(<span class="string">'$'</span>);
 
-    <span class="kd">var</span> <span class="nx">Panel</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-        <span class="nx">attrs</span><span class="o">:</span> <span class="p">{</span>
-            <span class="nx">element</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">value</span><span class="o">:</span> <span class="s1">&#39;#test&#39;</span><span class="p">,</span>
-                <span class="nx">readOnly</span><span class="o">:</span> <span class="kc">true</span>
-            <span class="p">},</span>
-            <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;#fff&#39;</span><span class="p">,</span>
-            <span class="nx">size</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
-                <span class="nx">height</span><span class="o">:</span> <span class="mi">100</span>
-            <span class="p">},</span>
-            <span class="nx">x</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
-            <span class="nx">y</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
-            <span class="nx">xy</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">getter</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">);</span>
-                <span class="p">},</span>
-                <span class="nx">setter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="nx">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="nx">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
+    <span class="keyword">var</span> Panel = Base.extend({
+        attrs: {
+            element: {
+                value: <span class="string">'#test'</span>,
+                readOnly: <span class="literal">true</span>
+            },
+            color: <span class="string">'#fff'</span>,
+            size: {
+                width: <span class="number">100</span>,
+                height: <span class="number">100</span>
+            },
+            x: <span class="number">200</span>,
+            y: <span class="number">200</span>,
+            xy: {
+                getter: <span class="keyword">function</span>() {
+                    <span class="keyword">return</span> <span class="keyword">this</span>.get(<span class="string">'x'</span>) + <span class="keyword">this</span>.get(<span class="string">'y'</span>);
+                },
+                setter: <span class="keyword">function</span>(val) {
+                    <span class="keyword">this</span>.set(<span class="string">'x'</span>, val[<span class="number">0</span>]);
+                    <span class="keyword">this</span>.set(<span class="string">'y'</span>, val[<span class="number">1</span>]);
+                }
+            }
+        },
 
-        <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">Panel</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">initialize</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">config</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">element</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-        <span class="p">},</span>
+        initialize: <span class="keyword">function</span>(config) {
+            Panel.superclass.initialize.call(<span class="keyword">this</span>, config);
+            <span class="keyword">this</span>.element = $(config.element).eq(<span class="number">0</span>);
+        },
 
-        <span class="nx">_onChangeColor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;backgroundColor&#39;</span><span class="p">,</span> <span class="nx">val</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
-<span class="p">});</span>
-</pre></div>
+        _onChangeColor: <span class="keyword">function</span>(val) {
+            <span class="keyword">this</span>.element.css(<span class="string">'backgroundColor'</span>, val);
+        }
+    });
+});
+</code></pre></div>
 <p>在 <code>initialize</code> 方法中，调用 <code>superclass.initialize</code> 方法，就可以自动设置好实例的属性。</p>
-<div class="highlight"><pre><span class="cm">/* test.js */</span>
-<span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">Panel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./panel&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><code class="javascript"><span class="comment">/* test.js */</span>
+define(<span class="keyword">function</span>(require, exports, module) {
+    <span class="keyword">var</span> Panel = require(<span class="string">'./panel'</span>);
 
-    <span class="kd">var</span> <span class="nx">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Panel</span><span class="p">({</span>
-        <span class="nx">element</span><span class="o">:</span> <span class="s1">&#39;#test&#39;</span><span class="p">,</span>
-        <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;#f00&#39;</span><span class="p">,</span>
-        <span class="nx">size</span><span class="o">:</span> <span class="p">{</span>
-            <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
+    <span class="keyword">var</span> panel = <span class="keyword">new</span> Panel({
+        element: <span class="string">'#test'</span>,
+        color: <span class="string">'#f00'</span>,
+        size: {
+            width: <span class="number">200</span>
+        }
+    });
 
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">panel</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">));</span> <span class="c1">// &#39;#f00&#39;</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">panel</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">));</span> <span class="c1">// { width: 200, height: 100 }</span>
-<span class="p">});</span>
-</pre></div>
+    console.log(panel.get(<span class="string">'color'</span>)); <span class="comment">// '#f00'</span>
+    console.log(panel.get(<span class="string">'size'</span>)); <span class="comment">// { width: 200, height: 100 }</span>
+});
+</code></pre></div>
 <p>使用 <code>extend</code> 创建类时，如果混入了 <code>Events</code> 模块，则在初始化时，实例中的 <code>_onChangeX</code>
 方法会自动注册到 <code>change:x</code> 事件的回调队列中：</p>
-<div class="highlight"><pre><span class="cm">/* test2.js */</span>
-<span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">Panel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./panel&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><code class="javascript"><span class="comment">/* test2.js */</span>
+define(<span class="keyword">function</span>(require, exports, module) {
+    <span class="keyword">var</span> Panel = require(<span class="string">'./panel'</span>);
 
-    <span class="kd">var</span> <span class="nx">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Panel</span><span class="p">({</span> <span class="nx">element</span><span class="o">:</span> <span class="s1">&#39;#test&#39;</span> <span class="p">});</span>
-    <span class="nx">panel</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;#00f&#39;</span><span class="p">);</span> <span class="c1">// this.element 的背景色自动变为 &#39;#00f&#39;</span>
-<span class="p">});</span>
-</pre></div>
-
-<h2 id="toc_1">交流讨论</h2>
-
+    <span class="keyword">var</span> panel = <span class="keyword">new</span> Panel({ element: <span class="string">'#test'</span> });
+    panel.set(<span class="string">'color'</span>, <span class="string">'#00f'</span>); <span class="comment">// this.element 的背景色自动变为 '#00f'</span>
+});
+</code></pre></div><h2 id="%E4%BA%A4%E6%B5%81%E8%AE%A8%E8%AE%BA">交流讨论</h2>
 <ul>
 <li><a href="https://github.com/alipay/arale/issues/74">after / before 与 on 的含义冲突</a></li>
 </ul>
 
+  </div>
+</article>
 </div>
-<div class="sidebar sidebar-components"></div>
       </div>
     </div>
-
-    <footer id="footer">
-      <div class="container">
-        <div class="copyright">
-          <p>&copy; 2012 aralejs.org</p>
-          <p>除非另有声明，本站所有代码遵循 MIT 协议</p>
-        </div>
-      </div>
-    </footer>
+    <div id="footer-wrapper">
+      <footer>
+      <p class="powered">
+        <a href="http://aralejs.org">Arale</a> •
+        <a href="http://seajs.org">SeaJS</a> •
+        <a href="https://github.com/spmjs/spm">spm</a> •
+        <a href="http://lab.lepture.com/nico/">nico</a>
+        </p>
+      </footer>
+    </div>
   </body>
 </html>

@@ -1,0 +1,23 @@
+language: node_js
+
+notifications:
+    email:
+        - aralejs@gmail.com
+
+node_js:
+  - 0.8
+
+install: 
+  - npm install nico
+  - git clone https://github.com/spmjs/spm.git ../spm
+  - npm install ../spm
+  - npm install mocha-phantomjs
+  - spm env --init
+  - sed -i 's/\[/[\"modules.spmjs.org\",/g' ~/.spm/config.json
+  - spm install
+
+before_script:
+  - git clone https://github.com/aralejs/nico-arale.git _theme
+  - nohup nico server -q -C _theme/nico.js debug &
+
+script: mocha-phantomjs http://127.0.0.1:8000/tests/runner.html
