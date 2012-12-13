@@ -16,9 +16,7 @@ before_script:
   - nohup node tests/test-travis.js &
 
 install: 
-  - git clone https://github.com/spmjs/spm.git ../spm
-  - npm install ../spm
-  - npm install node-static swig mocha-phantomjs
+  - npm install spm node-static swig mocha-phantomjs
   - spm install
 
-script: ./node_modules/.bin/mocha-phantomjs http://127.0.0.1:8000/tests/runner.html
+script: mocha-phantomjs http://127.0.0.1:8000/tests/runner.html
