@@ -13,8 +13,6 @@ install:
   - npm install mocha-phantomjs
 
 before_script:
-  - spm env --init
-  - sed -i 's/\[/[\"modules.spmjs.org\",/g' ~/.spm/config.json
   - spm install
   - git clone https://github.com/aralejs/nico-arale.git _theme
   - nohup nico server -q -C _theme/nico.js debug &
