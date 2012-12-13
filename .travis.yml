@@ -7,14 +7,16 @@ notifications:
 node_js:
   - 0.8
 
-install: 
-  - npm install nico
-  - npm install spm
-  - npm install mocha-phantomjs
-  - spm install
+install:
+  - npm install node-static swig mocha-phantomjs
 
 before_script:
-  - git clone https://github.com/aralejs/nico-arale.git _theme
-  - nohup nico server -q -C _theme/nico.js debug &
+  - git clone git://github.com/aralejs/nico-arale.git ../nico-arale
+  - python ../nico-arale/spm-install.py
+  - cp -r ../nico-arale/static tests/
+  - mkdir tests/templates
+  - cp ../nico-arale/templates/mocha-runner.html tests/templates/runner.html
+  - cp ../nico-arale/test-travis.js tests/
+  - nohup node tests/test-travis.js &
 
-script: mocha-phantomjs --timeout=0 http://127.0.0.1:8000/tests/runner.html
+script: ./node_modules/.bin/mocha-phantomjs --timeout=10000 http://127.0.0.1:8000/tests/runner.html
