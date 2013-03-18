@@ -17,8 +17,6 @@
       "class": "arale/class/1.0.0/class",
       "events": "arale/events/1.0.0/events"
     },
-    "output": {
-      "base.js": "."
-    }
+    "output": ["base.js"]
   }
 }
