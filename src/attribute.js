@@ -72,6 +72,7 @@ define(function(require, exports) {
 
     options || (options = {});
     var silent = options.silent;
+    var override = options.override;
     
     var now = this.attrs;
     var changed = this.__changedAttrs || (this.__changedAttrs = {});
@@ -95,8 +96,9 @@ define(function(require, exports) {
       var prev = this.get(key);
 
       // 获取需要设置的 val 值
+      // 如果设置了 override 为 true，表示要强制覆盖，就不去 merge 了
       // 都为对象时，做 merge 操作，以保留 prev 上没有覆盖的值
-      if (isPlainObject(prev) && isPlainObject(val)) {
+      if (!override && isPlainObject(prev) && isPlainObject(val)) {
         val = merge(merge({}, prev), val);
       }
 
