@@ -3,7 +3,6 @@ define(function(require) {
   var expect = require('expect');
   var Base = require('base');
   var $ = require('$');
-  var expect = require('expect');
 
   describe('Base', function() {
 
