@@ -1,6 +1,7 @@
 define(function(require) {
 
-  var Base = require('../src/base');
+  var expect = require('expect');
+  var Base = require('base');
   var $ = require('$');
 
   describe('Base', function() {
