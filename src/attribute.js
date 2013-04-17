@@ -10,12 +10,7 @@ define(function(require, exports) {
 
   // 负责 attributes 的初始化
   // attributes 是与实例相关的状态信息，可读可写，发生变化时，会自动触发相关事件
-  exports.initAttrs = function(config, dataAttrsConfig) {
-
-    // 合并来自 data-attr 的配置
-    if (dataAttrsConfig) {
-      config = config ? merge(dataAttrsConfig, config) : dataAttrsConfig;
-    }
+  exports.initAttrs = function(config) {
 
     // Get all inherited attributes.
     var specialProps = this.propsInAttrs || [];
