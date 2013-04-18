@@ -1,6 +1,7 @@
 define(function(require) {
 
   var expect = require('expect');
+  var sinon = require('sinon');
   var Base = require('base');
   var $ = require('$');
 
@@ -490,6 +491,40 @@ define(function(require) {
       }
 
       expect(counter).to.equal(2);
+    });
+
+    it('prevent before event', function() {
+      var spy = sinon.spy();
+      var stub = sinon.stub();
+      var A = Base.extend({
+        fn: spy
+      });
+
+      var a = new A().before('fn', stub);
+
+      stub.returns(false);
+      a.fn();
+      expect(spy.called).not.to.be.ok();
+      spy.reset();
+      stub.reset();
+
+      stub.returns(true);
+      a.fn();
+      expect(spy.called).to.be.ok();
+      spy.reset();
+      stub.reset();
+
+      stub.returns(undefined);
+      a.fn();
+      expect(spy.called).to.be.ok();
+      spy.reset();
+      stub.reset();
+
+      stub.returns('');
+      a.fn();
+      expect(spy.called).to.be.ok();
+      spy.reset();
+      stub.reset();
     });
 
     it('test change method', function() {
