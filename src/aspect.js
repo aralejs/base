@@ -57,7 +57,9 @@ define(function(require, exports) {
       var args = Array.prototype.slice.call(arguments);
       var beforeArgs = ['before:' + methodName].concat(args);
 
-      this.trigger.apply(this, beforeArgs);
+      // prevent if trigger return false
+      if (!this.trigger.apply(this, beforeArgs)) return;
+
       var ret = old.apply(this, arguments);
       this.trigger('after:' + methodName, ret);
 
