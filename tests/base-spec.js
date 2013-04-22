@@ -112,7 +112,8 @@ define(function(require) {
       expect(myWidget.get('size') === mySize).to.equal(false);
     });
 
-    it('events declaration in config', function() {
+    // 去除该功能 #15
+    xit('events declaration in config', function() {
       var counter = 0;
 
       var A = Base.extend({

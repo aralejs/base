@@ -34,9 +34,6 @@ define(function(require, exports) {
     // 对于有 setter 的属性，要用初始值 set 一下，以保证关联属性也一同初始化
     setSetterAttrs(this, attrs, userValues);
 
-    // Convert `on/before/afterXxx` config to event handler.
-    parseEventsFromAttrs(this, attrs);
-
     // 将 this.attrs 上的 special properties 放回 this 上
     copySpecialProps(specialProps, this, this.attrs, true);
   };
@@ -147,10 +144,6 @@ define(function(require, exports) {
 
   function isString(val) {
     return toString.call(val) === '[object String]';
-  }
-
-  function isFunction(val) {
-    return toString.call(val) === '[object Function]';
   }
 
   function isWindow(o) {
@@ -280,9 +273,6 @@ define(function(require, exports) {
   }
 
 
-  var EVENT_PATTERN = /^(on|before|after)([A-Z].*)$/;
-  var EVENT_NAME_PATTERN = /^(Change)?([A-Z])(.*)/;
-
   function parseEventsFromInstance(host, attrs) {
     for (var attr in attrs) {
       if (attrs.hasOwnProperty(attr)) {
@@ -293,28 +283,6 @@ define(function(require, exports) {
       }
     }
   }
-
-  function parseEventsFromAttrs(host, attrs) {
-    for (var key in attrs) {
-      if (attrs.hasOwnProperty(key)) {
-        var value = attrs[key].value, m;
-
-        if (isFunction(value) && (m = key.match(EVENT_PATTERN))) {
-          host[m[1]](getEventName(m[2]), value);
-          delete attrs[key];
-        }
-      }
-    }
-  }
-
-  // Converts `Show` to `show` and `ChangeTitle` to `change:title`
-  function getEventName(name) {
-    var m = name.match(EVENT_NAME_PATTERN);
-    var ret = m[1] ? 'change:' : '';
-    ret += m[2].toLowerCase() + m[3];
-    return ret;
-  }
-
 
   function setSetterAttrs(host, attrs, userValues) {
     var options = { silent: true };
