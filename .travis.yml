@@ -5,7 +5,7 @@ node_js:
 
 install:
   - npm install node-static mocha-phantomjs
-  - npm install nico@ninja
+  - npm install nico
 
 before_script:
   - git clone -b new-nico git://github.com/aralejs/nico-arale.git _theme
