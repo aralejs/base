@@ -10,6 +10,9 @@ define("arale/base/1.1.0/base-debug", [ "arale/class/1.0.0/class-debug", "arale/
         Implements: [ Events, Aspect, Attribute ],
         initialize: function(config) {
             this.initAttrs(config);
+            // Automatically register `this._onChangeAttr` method as
+            // a `change:attr` event handler.
+            parseEventsFromInstance(this, this.attrs);
         },
         destroy: function() {
             this.off();
@@ -20,6 +23,19 @@ define("arale/base/1.1.0/base-debug", [ "arale/class/1.0.0/class-debug", "arale/
             }
         }
     });
+    function parseEventsFromInstance(host, attrs) {
+        for (var attr in attrs) {
+            if (attrs.hasOwnProperty(attr)) {
+                var m = "_onChange" + ucfirst(attr);
+                if (host[m]) {
+                    host.on("change:" + attr, host[m]);
+                }
+            }
+        }
+    }
+    function ucfirst(str) {
+        return str.charAt(0).toUpperCase() + str.substring(1);
+    }
 });
 
 define("arale/base/1.1.0/aspect-debug", [], function(require, exports) {
@@ -94,17 +110,12 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
             userValues = normalize(config, true);
             merge(attrs, userValues);
         }
-        // Automatically register `this._onChangeAttr` method as
-        // a `change:attr` event handler.
-        parseEventsFromInstance(this, attrs);
         // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs，不存在覆盖问题
         this.attrs = attrs;
         // 对于有 setter 的属性，要用初始值 set 一下，以保证关联属性也一同初始化
         setSetterAttrs(this, attrs, userValues);
-        // Convert `on/before/afterXxx` config to event handler.
-        parseEventsFromAttrs(this, attrs);
         // 将 this.attrs 上的 special properties 放回 this 上
-        copySpecialProps(specialProps, this, this.attrs, true);
+        copySpecialProps(specialProps, this, attrs, true);
     };
     // Get the value of an attribute.
     exports.get = function(key) {
@@ -186,9 +197,6 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
     function isString(val) {
         return toString.call(val) === "[object String]";
     }
-    function isFunction(val) {
-        return toString.call(val) === "[object Function]";
-    }
     function isWindow(o) {
         return o != null && o == o.window;
     }
@@ -250,9 +258,6 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
             return result;
         };
     }
-    function ucfirst(str) {
-        return str.charAt(0).toUpperCase() + str.substring(1);
-    }
     function getInheritedAttrs(instance, specialProps) {
         var inherited = [];
         var proto = instance.constructor.prototype;
@@ -284,36 +289,6 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
                 receiver[key] = isAttr2Prop ? receiver.get(key) : supplier[key];
             }
         }
-    }
-    var EVENT_PATTERN = /^(on|before|after)([A-Z].*)$/;
-    var EVENT_NAME_PATTERN = /^(Change)?([A-Z])(.*)/;
-    function parseEventsFromInstance(host, attrs) {
-        for (var attr in attrs) {
-            if (attrs.hasOwnProperty(attr)) {
-                var m = "_onChange" + ucfirst(attr);
-                if (host[m]) {
-                    host.on("change:" + attr, host[m]);
-                }
-            }
-        }
-    }
-    function parseEventsFromAttrs(host, attrs) {
-        for (var key in attrs) {
-            if (attrs.hasOwnProperty(key)) {
-                var value = attrs[key].value, m;
-                if (isFunction(value) && (m = key.match(EVENT_PATTERN))) {
-                    host[m[1]](getEventName(m[2]), value);
-                    delete attrs[key];
-                }
-            }
-        }
-    }
-    // Converts `Show` to `show` and `ChangeTitle` to `change:title`
-    function getEventName(name) {
-        var m = name.match(EVENT_NAME_PATTERN);
-        var ret = m[1] ? "change:" : "";
-        ret += m[2].toLowerCase() + m[3];
-        return ret;
     }
     function setSetterAttrs(host, attrs, userValues) {
         var options = {
