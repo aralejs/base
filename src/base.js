@@ -43,4 +43,8 @@ define(function(require, exports, module) {
       }
     }
   }
+
+  function ucfirst(str) {
+    return str.charAt(0).toUpperCase() + str.substring(1);
+  }
 });

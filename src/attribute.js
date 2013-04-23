@@ -222,11 +222,6 @@ define(function(require, exports) {
     }
   }
 
-  function ucfirst(str) {
-    return str.charAt(0).toUpperCase() + str.substring(1);
-  }
-
-
   function getInheritedAttrs(instance, specialProps) {
     var inherited = [];
     var proto = instance.constructor.prototype;
