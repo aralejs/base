@@ -24,10 +24,6 @@ define(function(require, exports) {
       merge(attrs, userValues);
     }
 
-    // Automatically register `this._onChangeAttr` method as
-    // a `change:attr` event handler.
-    parseEventsFromInstance(this, attrs);
-
     // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs，不存在覆盖问题
     this.attrs = attrs;
 
@@ -35,7 +31,7 @@ define(function(require, exports) {
     setSetterAttrs(this, attrs, userValues);
 
     // 将 this.attrs 上的 special properties 放回 this 上
-    copySpecialProps(specialProps, this, this.attrs, true);
+    copySpecialProps(specialProps, this, attrs, true);
   };
 
 
@@ -272,17 +268,6 @@ define(function(require, exports) {
     }
   }
 
-
-  function parseEventsFromInstance(host, attrs) {
-    for (var attr in attrs) {
-      if (attrs.hasOwnProperty(attr)) {
-        var m = '_onChange' + ucfirst(attr);
-        if (host[m]) {
-          host.on('change:' + attr, host[m]);
-        }
-      }
-    }
-  }
 
   function setSetterAttrs(host, attrs, userValues) {
     var options = { silent: true };

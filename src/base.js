@@ -15,6 +15,10 @@ define(function(require, exports, module) {
 
     initialize: function(config) {
       this.initAttrs(config);
+
+      // Automatically register `this._onChangeAttr` method as
+      // a `change:attr` event handler.
+      parseEventsFromInstance(this, this.attrs);
     },
 
     destroy: function() {
@@ -28,4 +32,15 @@ define(function(require, exports, module) {
     }
   });
 
+
+  function parseEventsFromInstance(host, attrs) {
+    for (var attr in attrs) {
+      if (attrs.hasOwnProperty(attr)) {
+        var m = '_onChange' + ucfirst(attr);
+        if (host[m]) {
+          host.on('change:' + attr, host[m]);
+        }
+      }
+    }
+  }
 });
