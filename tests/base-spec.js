@@ -688,6 +688,16 @@ define(function(require) {
       expect(t.get('baseElement')._id).to.equal(undefined);
     });
 
+    it('#16 after callback should pass arguments from method', function() {
+      var spy = sinon.spy();
+      var T = Base.extend({
+        show: function(){return 1}
+      });
+
+      var t = new T().after('show', spy);
+      t.show('a', 'b');
+      expect(spy.calledWith(1, 'a', 'b')).to.be.ok();
+    });
   });
 
 });

@@ -61,7 +61,8 @@ define(function(require, exports) {
       if (this.trigger.apply(this, beforeArgs) === false) return;
 
       var ret = old.apply(this, arguments);
-      this.trigger('after:' + methodName, ret);
+      var afterArgs = ['after:' + methodName, ret].concat(args);
+      this.trigger.apply(this, afterArgs);
 
       return ret;
     };
