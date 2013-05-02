@@ -698,6 +698,29 @@ define(function(require) {
       t.show('a', 'b');
       expect(spy.calledWith(1, 'a', 'b')).to.be.ok();
     });
+
+    it('destroy', function() {
+      var spy = sinon.spy();
+      var T = Base.extend({
+        initialize: function() {
+          this.a = 1;
+        },
+      });
+
+      var t = new T();
+      t.on('a', spy);
+
+      expect(t.a).to.be(1);
+      t.trigger('a');
+      expect(spy.called).to.be.ok();
+      spy.reset();
+
+      t.destroy();
+      expect(t.a).to.be(undefined);
+      t.trigger('a');
+      expect(spy.called).not.to.be.ok();
+      spy.reset();
+    });
   });
 
 });
