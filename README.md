@@ -2,7 +2,7 @@
 
 ---
 
-[![Build Status](https://travis-ci.org/aralejs/base.png)](https://travis-ci.org/aralejs/base)
+[![Build Status](https://travis-ci.org/aralejs/base.png)](https://travis-ci.org/aralejs/base) [![Coverage Status](https://coveralls.io/repos/aralejs/base/badge.png?branch=master)](https://coveralls.io/r/aralejs/base)
 
 Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。
 
@@ -16,7 +16,7 @@ Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。
 
 基于 Base 创建子类。例子：
 
-```js
+```
 /* pig.js */
 define(function(require, exports, module) {
    var Base = require('base');
@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 
 Base 是使用 `Class` 创建的一个基础类，默认混入了 `Events`、`Attribute` 等模块：
 
-```js
+```
 /* base.js */
 define(function(require) {
 
