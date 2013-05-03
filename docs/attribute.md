@@ -98,7 +98,7 @@ define(function(require, exports, module) {
 
 #### options.silent
 
-设置属性时不会触发 change 事件。
+`silent=true` 时不会触发 change 事件。
 
 ```
 var panel = new Panel({ element: '#test' });
@@ -107,7 +107,7 @@ panel.set('color', '#00f', {silent: true}); // this.element 的背景色不会�
 
 #### options.override
 
-如果属性值为一个简单对象，默认的方式是混合，但指定 `override` 会覆盖原来的属性。
+如果属性值为一个简单对象，默认的方式是混合，但 `override=true` 会覆盖原来的属性。
 
 ### get `.get(key)`
 
