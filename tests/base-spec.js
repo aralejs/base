@@ -774,6 +774,21 @@ define(function(require) {
       t.change();
       expect(spy.called).to.be.ok();
     });
+
+    it('other attr format', function() {
+      var T = Base.extend({
+        attrs: {
+          a: true,
+          b: /a/g
+        }
+      });
+
+      var t = new T();
+      t.set('a', false);
+      t.set('b', /b/g);
+      expect(t.get('a')).to.be(false);
+      expect(t.get('b')).to.eql(/b/g);
+    })
   });
 
 });
