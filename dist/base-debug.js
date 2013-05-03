@@ -83,7 +83,8 @@ define("arale/base/1.1.0/aspect-debug", [], function(require, exports) {
             // prevent if trigger return false
             if (this.trigger.apply(this, beforeArgs) === false) return;
             var ret = old.apply(this, arguments);
-            this.trigger("after:" + methodName, ret);
+            var afterArgs = [ "after:" + methodName, ret ].concat(args);
+            this.trigger.apply(this, afterArgs);
             return ret;
         };
         this[methodName].__isAspected = true;
