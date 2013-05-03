@@ -721,6 +721,22 @@ define(function(require) {
       expect(spy.called).not.to.be.ok();
       spy.reset();
     });
+
+    it('can not set readOnly attr', function() {
+      var T = Base.extend({
+        attrs: {
+          a: {
+            value: 1,
+            readOnly: true
+          }
+        }
+      });
+
+      var t = new T();
+      expect(function() {
+        t.set('a', 2);
+      }).to.throwError();
+    });
   });
 
 });
