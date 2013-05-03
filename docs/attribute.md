@@ -13,7 +13,7 @@
 
 基于 `Base.extend` 创建的类，会自动添加上 `Attribute` 提供的功能。例子：
 
-```js
+```
 /* panel.js */
 define(function(require, exports, module) {
     var Base = require('base');
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
 
 在 `initialize` 方法中，调用 `superclass.initialize` 方法，就可以自动设置好实例的属性。
 
-```js
+```
 /* test.js */
 define(function(require, exports, module) {
     var Panel = require('./panel');
@@ -78,7 +78,7 @@ define(function(require, exports, module) {
 使用 `extend` 创建类时，如果混入了 `Events` 模块，则在初始化时，实例中的 `_onChangeX`
 方法会自动注册到 `change:x` 事件的回调队列中：
 
-```js
+```
 /* test2.js */
 define(function(require, exports, module) {
     var Panel = require('./panel');
@@ -88,6 +88,30 @@ define(function(require, exports, module) {
 });
 ```
 
+虽然在组件实例化的时候也会设置属性，但不会触发 `change:x` 事件，即不会执行 `_onChangeX`。
+
+## API
+
+### set `.set(key, value, options)`
+
+设置某个值的属性，如果有定义 setter，会先调用 setter。
+
+#### options.silent
+
+设置属性时不会触发 change 事件。
+
+```
+var panel = new Panel({ element: '#test' });
+panel.set('color', '#00f', {silent: true}); // this.element 的背景色不会改变
+```
+
+#### options.override
+
+如果属性值为一个简单对象，默认的方式是混合，但指定 `override` 会覆盖原来的属性。
+
+### get `.get(key)`
+
+获取某个属性值，如果有定义 getter，会返回 getter 的返回值。
 
 ## 交流讨论
 
