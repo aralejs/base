@@ -737,6 +737,24 @@ define(function(require) {
         t.set('a', 2);
       }).to.throwError();
     });
+
+    it('attr can be overrided', function() {
+      var T = Base.extend({
+        attrs: {
+          a: {
+            b: 1,
+            c: 2
+          }
+        }
+      });
+
+      var t = new T();
+      t.set('a', {b:3});
+      expect(t.get('a')).to.eql({b:3, c:2});
+
+      t.set('a', {b:3}, {override: true});
+      expect(t.get('a')).to.eql({b:3});
+    });
   });
 
 });
