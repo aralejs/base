@@ -755,6 +755,25 @@ define(function(require) {
       t.set('a', {b:3}, {override: true});
       expect(t.get('a')).to.eql({b:3});
     });
+
+    it('change silent attr manually', function() {
+      var spy = sinon.spy();
+      var T = Base.extend({
+        attrs: {
+          a: 1
+        },
+
+        _onChangeA: spy
+      });
+
+      var t = new T();
+
+      t.set('a', 2, {silent: true});
+      expect(spy.called).not.to.be.ok();
+
+      t.change();
+      expect(spy.called).to.be.ok();
+    });
   });
 
 });
