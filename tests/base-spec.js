@@ -788,7 +788,19 @@ define(function(require) {
       t.set('b', /b/g);
       expect(t.get('a')).to.be(false);
       expect(t.get('b')).to.eql(/b/g);
-    })
+    });
+
+    it('attr moment', function() {
+      var moment = require('gallery/moment/2.0.0/moment');
+
+      var T = Base.extend({
+        attrs: {
+          focus: ''
+        }
+      });
+      var t = new T({focus: moment()});
+      expect(moment.isMoment(t.get('focus'))).to.be.ok();
+    });
   });
 
 });
