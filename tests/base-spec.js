@@ -3,6 +3,7 @@ define(function(require) {
   var expect = require('expect');
   var sinon = require('sinon');
   var Base = require('base');
+  var Attribute = require('attribute');
   var $ = require('$');
 
   describe('Base', function() {
@@ -800,6 +801,18 @@ define(function(require) {
       });
       var t = new T({focus: moment()});
       expect(moment.isMoment(t.get('focus'))).to.be.ok();
+    });
+
+    it('isPlainObject #19', function() {
+      function Foo() {
+        this['c'] = 'c';
+        this['d'] = 'd';
+      }
+      Foo.prototype = {
+        'a': 'a',
+        'b': 'b'
+      };
+      expect(Attribute._isPlainObject(new Foo())).not.to.be.ok();
     });
   });
 
