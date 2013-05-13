@@ -134,6 +134,22 @@ define(function(require, exports) {
   var toString = Object.prototype.toString;
   var hasOwn = Object.prototype.hasOwnProperty;
 
+  /**
+   * Detect the JScript [[DontEnum]] bug:
+   * In IE < 9 an objects own properties, shadowing non-enumerable ones, are
+   * made non-enumerable as well.
+   * https://github.com/bestiejs/lodash/blob/7520066fc916e205ef84cb97fbfe630d7c154158/lodash.js#L134-L144
+   */
+  /** Detect if own properties are iterated after inherited properties (IE < 9) */
+  var iteratesOwnLast
+  (function() {
+    var props = []
+    function ctor() { this.x = 1 }
+    ctor.prototype = { 'valueOf': 1, 'y': 1 }
+    for (var prop in new ctor) { props.push(prop) }
+    iteratesOwnLast = props[0] != 'x'
+  }())
+
   var isArray = Array.isArray || function(val) {
     return toString.call(val) === '[object Array]';
   };
@@ -168,9 +184,20 @@ define(function(require, exports) {
       return false;
     }
 
+    var key
+
+    // Support: IE<9
+    // Handle iteration over inherited properties before own properties.
+    // http://bugs.jquery.com/ticket/12199
+    if (iteratesOwnLast) {
+      for (key in o) {
+        return hasOwn.call(o, key )
+      }
+    }
+
     // Own properties are enumerated firstly, so to speed up,
     // if last one is own, then all properties are own.
-    for (var key in o) {}
+    for (key in o) {}
 
     return key === undefined || hasOwn.call(o, key);
   }
