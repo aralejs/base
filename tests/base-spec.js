@@ -704,7 +704,7 @@ define(function(require) {
       var T = Base.extend({
         initialize: function() {
           this.a = 1;
-        },
+        }
       });
 
       var t = new T();
