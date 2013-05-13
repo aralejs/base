@@ -61,7 +61,7 @@ define(function(require, exports) {
     options || (options = {});
     var silent = options.silent;
     var override = options.override;
-    
+
     var now = this.attrs;
     var changed = this.__changedAttrs || (this.__changedAttrs = {});
 
@@ -127,6 +127,8 @@ define(function(require, exports) {
     return this;
   };
 
+  // for test
+  exports._isPlainObject = isPlainObject;
 
   // Helpers
   // -------
@@ -141,14 +143,14 @@ define(function(require, exports) {
    * https://github.com/bestiejs/lodash/blob/7520066fc916e205ef84cb97fbfe630d7c154158/lodash.js#L134-L144
    */
   /** Detect if own properties are iterated after inherited properties (IE < 9) */
-  var iteratesOwnLast
+  var iteratesOwnLast;
   (function() {
-    var props = []
-    function ctor() { this.x = 1 }
-    ctor.prototype = { 'valueOf': 1, 'y': 1 }
-    for (var prop in new ctor) { props.push(prop) }
-    iteratesOwnLast = props[0] != 'x'
-  }())
+    var props = [];
+    function Ctor() { this.x = 1; }
+    Ctor.prototype = { 'valueOf': 1, 'y': 1 };
+    for (var prop in new Ctor()) { props.push(prop); }
+    iteratesOwnLast = props[0] !== 'x';
+  }());
 
   var isArray = Array.isArray || function(val) {
     return toString.call(val) === '[object Array]';
@@ -184,14 +186,14 @@ define(function(require, exports) {
       return false;
     }
 
-    var key
+    var key;
 
     // Support: IE<9
     // Handle iteration over inherited properties before own properties.
     // http://bugs.jquery.com/ticket/12199
     if (iteratesOwnLast) {
       for (key in o) {
-        return hasOwn.call(o, key )
+        return hasOwn.call(o, key);
       }
     }
 
@@ -246,7 +248,7 @@ define(function(require, exports) {
         }
       }
       return result;
-    }
+    };
   }
 
   function getInheritedAttrs(instance, specialProps) {
