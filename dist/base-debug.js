@@ -101,20 +101,17 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
     // 负责 attributes 的初始化
     // attributes 是与实例相关的状态信息，可读可写，发生变化时，会自动触发相关事件
     exports.initAttrs = function(config) {
+        // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs，不存在覆盖问题
+        var attrs = this.attrs = {};
         // Get all inherited attributes.
         var specialProps = this.propsInAttrs || [];
-        var inheritedAttrs = getInheritedAttrs(this, specialProps);
-        var attrs = merge({}, inheritedAttrs);
-        var userValues;
+        mergeInheritedAttrs(attrs, this, specialProps);
         // Merge user-specific attributes from config.
         if (config) {
-            userValues = normalize(config, true);
-            merge(attrs, userValues);
+            mergeUserValue(attrs, config);
         }
-        // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs，不存在覆盖问题
-        this.attrs = attrs;
         // 对于有 setter 的属性，要用初始值 set 一下，以保证关联属性也一同初始化
-        setSetterAttrs(this, attrs, userValues);
+        setSetterAttrs(this, attrs, config);
         // 将 this.attrs 上的 special properties 放回 this 上
         copySpecialProps(specialProps, this, attrs, true);
     };
@@ -257,6 +254,9 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
         return key === undefined || hasOwn.call(o, key);
     }
     function isEmptyObject(o) {
+        if (!(o && toString.call(o) === "[object Object]")) {
+            return false;
+        }
         for (var p in o) {
             if (o.hasOwnProperty(p)) return false;
         }
@@ -292,7 +292,7 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
             return result;
         };
     }
-    function getInheritedAttrs(instance, specialProps) {
+    function mergeInheritedAttrs(attrs, instance, specialProps) {
         var inherited = [];
         var proto = instance.constructor.prototype;
         while (proto) {
@@ -310,11 +310,12 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
             proto = proto.constructor.superclass;
         }
         // Merge and clone default values to instance.
-        var result = {};
         for (var i = 0, len = inherited.length; i < len; i++) {
-            result = merge(result, normalize(inherited[i]));
+            merge(attrs, normalize(inherited[i]));
         }
-        return result;
+    }
+    function mergeUserValue(attrs, config) {
+        merge(attrs, normalize(config, true));
     }
     function copySpecialProps(specialProps, receiver, supplier, isAttr2Prop) {
         for (var i = 0, len = specialProps.length; i < len; i++) {
@@ -324,15 +325,15 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
             }
         }
     }
-    function setSetterAttrs(host, attrs, userValues) {
+    function setSetterAttrs(host, attrs, config) {
         var options = {
             silent: true
         };
         host.__initializingAttrs = true;
-        for (var key in userValues) {
-            if (userValues.hasOwnProperty(key)) {
+        for (var key in config) {
+            if (config.hasOwnProperty(key)) {
                 if (attrs[key].setter) {
-                    host.set(key, userValues[key].value, options);
+                    host.set(key, attrs[key].value, options);
                 }
             }
         }
@@ -349,18 +350,18 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
     //   }
     //
     function normalize(attrs, isUserValue) {
-        // clone it
-        attrs = merge({}, attrs);
+        var newAttrs = {};
         for (var key in attrs) {
             var attr = attrs[key];
-            if (isPlainObject(attr) && !isUserValue && hasOwnProperties(attr, ATTR_SPECIAL_KEYS)) {
+            if (!isUserValue && isPlainObject(attr) && hasOwnProperties(attr, ATTR_SPECIAL_KEYS)) {
+                newAttrs[key] = attr;
                 continue;
             }
-            attrs[key] = {
+            newAttrs[key] = {
                 value: attr
             };
         }
-        return attrs;
+        return newAttrs;
     }
     function hasOwnProperties(object, properties) {
         for (var i = 0, len = properties.length; i < len; i++) {
@@ -374,7 +375,7 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
     function isEmptyAttrValue(o) {
         return o == null || // null, undefined
         (isString(o) || isArray(o)) && o.length === 0 || // '', []
-        isPlainObject(o) && isEmptyObject(o);
+        isEmptyObject(o);
     }
     // 判断属性值 a 和 b 是否相等，注意仅适用于属性值的判断，非普适的 === 或 == 判断。
     function isEqual(a, b) {
