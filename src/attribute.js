@@ -274,12 +274,16 @@ define(function(require, exports) {
     }
 
     // Merge and clone default values to instance.
-    var result = {};
+    var result;
     for (var i = 0, len = inherited.length; i < len; i++) {
-      result = merge(result, normalize(inherited[i]));
+      if (!result) {
+        result = normalize(inherited[i]);
+      } else {
+        result = merge(result, normalize(inherited[i]));
+      }
     }
 
-    return result;
+    return result || {};
   }
 
   function copySpecialProps(specialProps, receiver, supplier, isAttr2Prop) {
