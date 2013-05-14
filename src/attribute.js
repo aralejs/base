@@ -321,24 +321,24 @@ define(function(require, exports) {
   //   }
   //
   function normalize(attrs, isUserValue) {
-    // clone it
-    attrs = merge({}, attrs);
+    var newAttrs = {};
 
     for (var key in attrs) {
       var attr = attrs[key];
 
-      if (isPlainObject(attr) &&
-          !isUserValue &&
+      if (!isUserValue &&
+          isPlainObject(attr) &&
           hasOwnProperties(attr, ATTR_SPECIAL_KEYS)) {
+        newAttrs[key] = attr;
         continue;
       }
 
-      attrs[key] = {
+      newAttrs[key] = {
         value: attr
       };
     }
 
-    return attrs;
+    return newAttrs;
   }
 
   function hasOwnProperties(object, properties) {
