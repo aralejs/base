@@ -205,6 +205,10 @@ define(function(require, exports) {
   }
 
   function isEmptyObject(o) {
+    if (!(o && toString.call(o) === "[object Object]")) {
+      return false;
+    }
+
     for (var p in o) {
       if (o.hasOwnProperty(p)) return false;
     }
@@ -359,7 +363,7 @@ define(function(require, exports) {
   function isEmptyAttrValue(o) {
     return o == null || // null, undefined
         (isString(o) || isArray(o)) && o.length === 0 || // '', []
-        isPlainObject(o) && isEmptyObject(o); // {}
+        isEmptyObject(o); // {}
   }
 
   // 判断属性值 a 和 b 是否相等，注意仅适用于属性值的判断，非普适的 === 或 == 判断。
