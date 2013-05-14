@@ -11,24 +11,20 @@ define(function(require, exports) {
   // 负责 attributes 的初始化
   // attributes 是与实例相关的状态信息，可读可写，发生变化时，会自动触发相关事件
   exports.initAttrs = function(config) {
+    // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs，不存在覆盖问题
+    var attrs = this.attrs = {};
 
     // Get all inherited attributes.
     var specialProps = this.propsInAttrs || [];
-    var inheritedAttrs = getInheritedAttrs(this, specialProps);
-    var attrs = merge({}, inheritedAttrs);
-    var userValues;
+    mergeInheritedAttrs(attrs, this, specialProps);
 
     // Merge user-specific attributes from config.
     if (config) {
-      userValues = normalize(config, true);
-      merge(attrs, userValues);
+      mergeUserValue(attrs, config);
     }
 
-    // initAttrs 是在初始化时调用的，默认情况下实例上肯定没有 attrs，不存在覆盖问题
-    this.attrs = attrs;
-
     // 对于有 setter 的属性，要用初始值 set 一下，以保证关联属性也一同初始化
-    setSetterAttrs(this, attrs, userValues);
+    setSetterAttrs(this, attrs, config);
 
     // 将 this.attrs 上的 special properties 放回 this 上
     copySpecialProps(specialProps, this, attrs, true);
@@ -255,7 +251,7 @@ define(function(require, exports) {
     };
   }
 
-  function getInheritedAttrs(instance, specialProps) {
+  function mergeInheritedAttrs(attrs, instance, specialProps) {
     var inherited = [];
     var proto = instance.constructor.prototype;
 
@@ -278,16 +274,13 @@ define(function(require, exports) {
     }
 
     // Merge and clone default values to instance.
-    var result;
     for (var i = 0, len = inherited.length; i < len; i++) {
-      if (!result) {
-        result = normalize(inherited[i]);
-      } else {
-        result = merge(result, normalize(inherited[i]));
-      }
+      merge(attrs, normalize(inherited[i]));
     }
+  }
 
-    return result || {};
+  function mergeUserValue(attrs, config) {
+    merge(attrs, normalize(config, true));
   }
 
   function copySpecialProps(specialProps, receiver, supplier, isAttr2Prop) {
@@ -301,14 +294,14 @@ define(function(require, exports) {
   }
 
 
-  function setSetterAttrs(host, attrs, userValues) {
+  function setSetterAttrs(host, attrs, config) {
     var options = { silent: true };
     host.__initializingAttrs = true;
 
-    for (var key in userValues) {
-      if (userValues.hasOwnProperty(key)) {
+    for (var key in config) {
+      if (config.hasOwnProperty(key)) {
         if (attrs[key].setter) {
-          host.set(key, userValues[key].value, options);
+          host.set(key, attrs[key].value, options);
         }
       }
     }
