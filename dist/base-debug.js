@@ -358,7 +358,7 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
         for (var key in config) {
             if (config.hasOwnProperty(key)) {
                 if (attrs[key].setter) {
-                    host.set(key, attrs[key].value, options);
+                    host.set(key, config[key], options);
                 }
             }
         }
