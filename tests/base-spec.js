@@ -813,6 +813,46 @@ define(function(require) {
       };
       expect(Attribute._isPlainObject(new Foo())).not.to.be.ok();
     });
+
+    it('setter need userValue', function() {
+      var spy = sinon.spy();
+      var Position = {
+        VIEWPORT: { _id: 'VIEWPORT', nodeType: 1 }
+      };
+      var T = Base.extend({
+        attrs: {
+          align: {
+            selfXY: [0, 0],
+            baseElement: Position.VIEWPORT,
+            baseXY: [0, 0]
+          },
+        }
+      });
+
+      var S = T.extend({
+        attrs: {
+          align: {
+            value: {
+              baseXY: [0, '100%'],
+              selfXY: [0, 0]
+            },
+            setter: function(val) {
+              spy(val)
+            }
+          }
+        }
+      });
+
+      var t = new S({
+        align: {
+          baseXY: [0, 0]
+        }
+      });
+
+      expect(spy.calledWith({
+          baseXY: [0, 0]
+      })).to.be.ok();
+    });
   });
 
 });
