@@ -825,7 +825,7 @@ define(function(require) {
             selfXY: [0, 0],
             baseElement: Position.VIEWPORT,
             baseXY: [0, 0]
-          },
+          }
         }
       });
 
