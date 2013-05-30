@@ -229,7 +229,7 @@ define(function(require) {
           y: {
             value: 0,
             setter: function(val) {
-              return parseInt(val);
+              return parseInt(val, 10);
             }
           },
           xy: {
@@ -496,16 +496,20 @@ define(function(require) {
 
     it('prevent before event', function() {
       var spy = sinon.spy();
+      var afterSpy = sinon.spy();
       var stub = sinon.stub();
       var A = Base.extend({
         fn: spy
       });
 
-      var a = new A().before('fn', stub);
+      var a = new A()
+        .before('fn', stub)
+        .after('fn', afterSpy);
 
       stub.returns(false);
       a.fn();
       expect(spy.called).not.to.be.ok();
+      expect(afterSpy.called).not.to.be.ok();
       spy.reset();
       stub.reset();
 
@@ -837,7 +841,7 @@ define(function(require) {
               selfXY: [0, 0]
             },
             setter: function(val) {
-              spy(val)
+              spy(val);
             }
           }
         }
