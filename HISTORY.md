@@ -6,8 +6,6 @@
 
 `tag:fixed` [#19](https://github.com/aralejs/base/issues/19) 修复 isPlainObject 的 bug
 
-`tag:changed` [#15](https://github.com/aralejs/base/issues/15) 去除 parseEventsFromAttrs
-
 `tag:new` [#5](https://github.com/aralejs/base/issues/5) before 回调能阻止函数执行
 
 `tag:improved` [#17](https://github.com/aralejs/base/issues/17) attribute 性能优化
