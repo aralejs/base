@@ -21,6 +21,9 @@ define("arale/base/1.1.0/base-debug", [ "arale/class/1.1.0/class-debug", "arale/
                     delete this[p];
                 }
             }
+            // Destroy should be called only once, generate a fake destroy after called
+            // https://github.com/aralejs/widget/issues/50
+            this.destroy = function() {};
         }
     });
     function parseEventsFromInstance(host, attrs) {
