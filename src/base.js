@@ -29,6 +29,10 @@ define(function(require, exports, module) {
           delete this[p];
         }
       }
+
+      // Destroy should be called only once, generate a fake destroy after called
+      // https://github.com/aralejs/widget/issues/50
+      this.destroy = function() {};
     }
   });
 

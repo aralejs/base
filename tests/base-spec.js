@@ -857,6 +857,30 @@ define(function(require) {
           baseXY: [0, 0]
       })).to.be.ok();
     });
+
+    it('destroy once', function() {
+      var calledA = 0, calledB = 0;
+      var A = Base.extend({
+        destroy: function() {
+          calledA++;
+          A.superclass.destroy.call(this);
+        }
+      });
+
+      var B = A.extend({
+        destroy: function() {
+          calledB++;
+          B.superclass.destroy.call(this);
+        }
+      });
+
+      var c = new B();
+      c.destroy();
+      c.destroy();
+
+      expect(calledA).to.be(1);
+      expect(calledB).to.be(1);
+    });
   });
 
 });
