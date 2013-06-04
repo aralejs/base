@@ -18,6 +18,8 @@
 
 `tag:improved` [#6](https://github.com/aralejs/base/issues/6) base 内部代码调整
 
+`tag:improved` [aralejs/widget#50](https://github.com/aralejs/widget/issues/50) destroy 只调用一次
+
 ## 1.0.0
 
 正式版本
