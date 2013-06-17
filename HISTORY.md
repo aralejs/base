@@ -2,7 +2,7 @@
 
 ---
 
-## 1.1.0
+## 1.1.1
 
 `tag:fixed` [#22](https://github.com/aralejs/base/issues/22) 修复 isEmptyObject 在 <= IE8 下的 bug
 
