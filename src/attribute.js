@@ -209,7 +209,7 @@ define(function(require, exports) {
 
   function isEmptyObject(o) {
     if (!o || toString.call(o) !== "[object Object]" ||
-        o.nodeType || isWindow(o)) {
+        o.nodeType || isWindow(o) || !o.hasOwnProperty) {
       return false;
     }
 

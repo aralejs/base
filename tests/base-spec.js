@@ -922,6 +922,32 @@ define(function(require) {
       t.set('parentNode', Number.MAX_VALUE);
       expect(t.get('parentNode')).to.eql(Number.MAX_VALUE);
 
+      t.set('parentNode', location);
+      expect(t.get('parentNode')).to.eql(location);
+
+      var aString = new String();
+      t.set('parentNode', aString);
+      expect(t.get('parentNode')).to.eql(aString);
+
+      var aArray = new Array();
+      t.set('parentNode', aArray);
+      expect(t.get('parentNode')).to.eql(aArray);
+
+      var aObject = new Object();
+      t.set('parentNode', aString);
+      expect(t.get('parentNode')).to.eql(aObject);
+
+      var aNumber = new Number();
+      t.set('parentNode', aString);
+      expect(t.get('parentNode')).to.eql(aNumber);
+
+      t.set('parentNode', {});
+      expect(t.get('parentNode')).to.eql({});
+
+      var aFunction = function() {};
+      t.set('parentNode', aFunction);
+      expect(t.get('parentNode')).to.eql(aFunction);
+
       $("#test").remove();
     });
   });

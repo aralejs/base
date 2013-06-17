@@ -262,7 +262,7 @@ define("arale/base/1.1.1/attribute-debug", [], function(require, exports) {
         return key === undefined || hasOwn.call(o, key);
     }
     function isEmptyObject(o) {
-        if (!o || toString.call(o) !== "[object Object]" || o.nodeType || isWindow(o)) {
+        if (!o || toString.call(o) !== "[object Object]" || o.nodeType || isWindow(o) || !o.hasOwnProperty) {
             return false;
         }
         for (var p in o) {
