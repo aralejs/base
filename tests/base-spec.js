@@ -407,6 +407,7 @@ define(function(require) {
 
       a.set('x', 3);
       a.set('x', 3);
+
       expect(counter).to.equal(1);
 
       a.set('x', 4, { silent: true });
@@ -880,6 +881,48 @@ define(function(require) {
 
       expect(calledA).to.be(1);
       expect(calledB).to.be(1);
+    });
+
+    it("isEmptyObject #22", function () {
+      $("<div id='test'></div>").appendTo("body");
+      var T = Base.extend({
+          attrs: {
+              parentNode: document.body
+          }
+      });
+
+      var t = new T();
+      t.set('parentNode', $("#test")[0]);
+      expect(t.get('parentNode')).to.eql($("#test")[0]);
+
+      t.set('parentNode', document);
+      expect(t.get('parentNode')).to.eql(document);
+
+      t.set('parentNode', {});
+      expect(t.get('parentNode')).to.eql({});
+
+      t.set('parentNode', window);
+      expect(t.get('parentNode')).to.eql(window);
+
+      t.set('parentNode', undefined);
+      expect(t.get('parentNode')).to.eql(undefined);
+
+      t.set('parentNode', []);
+      expect(t.get('parentNode')).to.eql([]);
+
+      t.set('parentNode', {});
+      expect(t.get('parentNode')).to.eql({});
+
+      t.set('parentNode', null);
+      expect(t.get('parentNode')).to.eql(null);
+
+      t.set('parentNode', $('#test'));
+      expect(t.get('parentNode')).to.eql($('#test'));
+
+      t.set('parentNode', Number.MAX_VALUE);
+      expect(t.get('parentNode')).to.eql(Number.MAX_VALUE);
+
+      $("#test").remove();
     });
   });
 

@@ -4,6 +4,10 @@
 
 ## 1.1.0
 
+`tag:fixed` [#22](https://github.com/aralejs/base/issues/22) 修复 isEmptyObject 在 <= IE8 下的 bug
+
+## 1.1.0
+
 `tag:fixed` [#19](https://github.com/aralejs/base/issues/19) 修复 isPlainObject 的 bug
 
 `tag:new` [#5](https://github.com/aralejs/base/issues/5) before 回调能阻止函数执行

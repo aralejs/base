@@ -1,4 +1,4 @@
-define("arale/base/1.1.0/base-debug", [ "arale/class/1.1.0/class-debug", "arale/events/1.1.0/events-debug", "./aspect-debug", "./attribute-debug" ], function(require, exports, module) {
+define("arale/base/1.1.1/base-debug", [ "arale/class/1.1.0/class-debug", "arale/events/1.1.0/events-debug", "./aspect-debug", "./attribute-debug" ], function(require, exports, module) {
     // Base
     // ---------
     // Base 是一个基础类，提供 Class、Events、Attrs 和 Aspect 支持。
@@ -41,7 +41,7 @@ define("arale/base/1.1.0/base-debug", [ "arale/class/1.1.0/class-debug", "arale/
     }
 });
 
-define("arale/base/1.1.0/aspect-debug", [], function(require, exports) {
+define("arale/base/1.1.1/aspect-debug", [], function(require, exports) {
     // Aspect
     // ---------------------
     // Thanks to:
@@ -94,7 +94,7 @@ define("arale/base/1.1.0/aspect-debug", [], function(require, exports) {
     }
 });
 
-define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
+define("arale/base/1.1.1/attribute-debug", [], function(require, exports) {
     // Attribute
     // -----------------
     // Thanks to:
@@ -262,7 +262,7 @@ define("arale/base/1.1.0/attribute-debug", [], function(require, exports) {
         return key === undefined || hasOwn.call(o, key);
     }
     function isEmptyObject(o) {
-        if (!(o && toString.call(o) === "[object Object]")) {
+        if (!o || toString.call(o) !== "[object Object]" || o.nodeType || isWindow(o)) {
             return false;
         }
         for (var p in o) {

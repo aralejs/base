@@ -1,7 +1,7 @@
 {
     "name": "base",
     "family": "arale",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。",
     "keywords": ["infrastructure"],
     "homepage": "http://aralejs.org/base",
