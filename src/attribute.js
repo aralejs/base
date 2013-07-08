@@ -224,24 +224,25 @@ define(function(require, exports) {
 
     for (key in supplier) {
       if (supplier.hasOwnProperty(key)) {
-        value = supplier[key];
-
-        // 只 clone 数组和 plain object，其他的保持不变
-        if (isArray(value)) {
-          value = value.slice();
-        }
-        else if (isPlainObject(value)) {
-          var prev = receiver[key];
-          isPlainObject(prev) || (prev = {});
-
-          value = merge(prev, value);
-        }
-
-        receiver[key] = value;
+        receiver[key] = cloneValue(supplier[key], receiver[key]);
       }
     }
 
     return receiver;
+  }
+
+  // 只 clone 数组和 plain object，其他的保持不变
+  function cloneValue(value, prev){
+    if (isArray(value)) {
+      value = value.slice();
+    }
+    else if (isPlainObject(value)) {
+      isPlainObject(prev) || (prev = {});
+
+      value = merge(prev, value);
+    }
+    
+    return value;
   }
 
   var keys = Object.keys;
@@ -283,12 +284,12 @@ define(function(require, exports) {
 
     // Merge and clone default values to instance.
     for (var i = 0, len = inherited.length; i < len; i++) {
-      merge(attrs, normalize(inherited[i]));
+      mergeAttrs(attrs, normalize(inherited[i]));
     }
   }
 
   function mergeUserValue(attrs, config) {
-    merge(attrs, normalize(config, true));
+    mergeAttrs(attrs, normalize(config, true), true);
   }
 
   function copySpecialProps(specialProps, receiver, supplier, isAttr2Prop) {
@@ -373,6 +374,41 @@ define(function(require, exports) {
     }
 
     return newAttrs;
+  }
+
+  // 专用于 attrs 的 merge 方法
+  function mergeAttrs(attrs, inheritedAttrs, isUserValue){
+    var key, value;
+    var attr;
+
+    for (key in inheritedAttrs) {
+      if (inheritedAttrs.hasOwnProperty(key)) {
+        value = inheritedAttrs[key];
+        attr = attrs[key];
+
+        if(!attr){
+          attr = attrs[key] = {};
+        }
+
+        // 从严谨上来说，遍历 ATTR_SPECIAL_KEYS 更好
+        // 从性能来说，直接 人肉赋值 更快
+        // 这里还是选择 性能优先
+
+        // 只有 value 要复制原值，其他的直接覆盖即可
+        (value['value'] !== undefined) && (attr['value'] = cloneValue(value['value'], attr['value']));
+
+        // 如果是用户赋值，只要考虑value
+        if(isUserValue){
+          continue;
+        }
+
+        value['getter'] && (attr['getter'] = value['getter']);
+        value['setter'] && (attr['setter'] = value['setter']);
+        (value['readOnly'] !== undefined) && (attr['readOnly'] = value['readOnly']);
+      }
+    }
+    
+    return attrs;
   }
 
   function hasOwnProperties(object, properties) {
