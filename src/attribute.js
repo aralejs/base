@@ -241,7 +241,7 @@ define(function(require, exports) {
 
       value = merge(prev, value);
     }
-    
+
     return value;
   }
 
@@ -376,6 +376,7 @@ define(function(require, exports) {
     return newAttrs;
   }
 
+  var ATTR_OPTIONS = ['setter', 'getter', 'readOnly'];
   // 专用于 attrs 的 merge 方法
   function mergeAttrs(attrs, inheritedAttrs, isUserValue){
     var key, value;
@@ -386,7 +387,7 @@ define(function(require, exports) {
         value = inheritedAttrs[key];
         attr = attrs[key];
 
-        if(!attr){
+        if (!attr) {
           attr = attrs[key] = {};
         }
 
@@ -398,16 +399,17 @@ define(function(require, exports) {
         (value['value'] !== undefined) && (attr['value'] = cloneValue(value['value'], attr['value']));
 
         // 如果是用户赋值，只要考虑value
-        if(isUserValue){
-          continue;
-        }
+        if (isUserValue) continue;
 
-        value['getter'] && (attr['getter'] = value['getter']);
-        value['setter'] && (attr['setter'] = value['setter']);
-        (value['readOnly'] !== undefined) && (attr['readOnly'] = value['readOnly']);
+        for (var i in ATTR_OPTIONS) {
+          var option = ATTR_OPTIONS[i];
+          if (value[option] !== undefined) {
+            attr[option] = value[option];
+          }
+        }
       }
     }
-    
+
     return attrs;
   }
 
