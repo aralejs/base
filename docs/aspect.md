@@ -69,7 +69,7 @@ dialog.after('show', function() {
     console.log(3);
 });
 
-dialog.show(); // ==> 1, 3
+dialog.show(); // ==> 1
 ```
 
 
