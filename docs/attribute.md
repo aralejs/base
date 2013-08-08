@@ -52,6 +52,8 @@ define(function(require, exports, module) {
             this.element.css('backgroundColor', val);
         }
     });
+
+    exports.Panel = Panel;
 });
 ```
 
@@ -60,7 +62,7 @@ define(function(require, exports, module) {
 ```
 /* test.js */
 define(function(require, exports, module) {
-    var Panel = require('./panel');
+    var Panel = require('./panel').Panel;
 
     var panel = new Panel({
         element: '#test',
@@ -81,7 +83,7 @@ define(function(require, exports, module) {
 ```
 /* test2.js */
 define(function(require, exports, module) {
-    var Panel = require('./panel');
+    var Panel = require('./panel').Panel;
 
     var panel = new Panel({ element: '#test' });
     panel.set('color', '#00f'); // this.element 的背景色自动变为 '#00f'
