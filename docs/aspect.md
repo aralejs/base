@@ -18,7 +18,7 @@
 
 在 `object[methodName]` 方法执行前，先执行 `callback` 函数。
 
-```
+```js
 var Dialog = Base.extend({
     ...
 
@@ -46,7 +46,7 @@ dialog.show(); // ==> 1, 2, 3
 `callback` 函数在执行时，接收的参数与传给 `object[methodName]` 参数相同。如果传入了
 `context` 参数，则 `callback` 里的 `this` 指向 `context`。
 
-```
+```js
 var dialog = new Dialog();
 
 dialog.before('show', function(a, b) {
@@ -59,7 +59,7 @@ dialog.show(1, 2); // ==> 1, 2
 
 **可以在 `callback` 中 return false 来阻止原函数执行。**
 
-```
+```js
 dialog.before('show', function() {
     console.log(1);
     return false;
@@ -96,7 +96,7 @@ dialog.show(1, 2); // ==> undefined, 1, 2
 
 `before` 和 `after` 是按注册的先后顺序执行的，先注册先执行。
 
-```
+```js
 dialog.before('show', function() {
     console.log(1);
 });
