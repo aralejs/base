@@ -16,7 +16,7 @@ Base 是一个基础类，提供 [Class](http://aralejs.org/class/)、[Events](h
 
 基于 Base 创建子类。例子：
 
-```
+```js
 /* pig.js */
 define(function(require, exports, module) {
    var Base = require('base');
@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 
 Base 是使用 `Class` 创建的一个基础类，默认混入了 `Events`、`Attribute` 等模块：
 
-```
+```js
 /* base.js */
 define(function(require) {
 

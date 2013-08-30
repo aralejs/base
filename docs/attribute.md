@@ -13,7 +13,7 @@
 
 基于 `Base.extend` 创建的类，会自动添加上 `Attribute` 提供的功能。例子：
 
-```
+```js
 /* panel.js */
 define(function(require, exports, module) {
     var Base = require('base');
@@ -52,15 +52,17 @@ define(function(require, exports, module) {
             this.element.css('backgroundColor', val);
         }
     });
+
+    exports.Panel = Panel;
 });
 ```
 
-在 `initialize` 方法中，调用 `superclass.initialize` 方法，就可以自动设置好实例的属性。
+**在 `initialize` 方法中，调用 `superclass.initialize` 方法，就可以自动设置好实例的属性。**
 
-```
+```js
 /* test.js */
 define(function(require, exports, module) {
-    var Panel = require('./panel');
+    var Panel = require('./panel').Panel;
 
     var panel = new Panel({
         element: '#test',
@@ -78,10 +80,10 @@ define(function(require, exports, module) {
 使用 `extend` 创建类时，如果混入了 `Events` 模块，则在初始化时，实例中的 `_onChangeX`
 方法会自动注册到 `change:x` 事件的回调队列中：
 
-```
+```js
 /* test2.js */
 define(function(require, exports, module) {
-    var Panel = require('./panel');
+    var Panel = require('./panel').Panel;
 
     var panel = new Panel({ element: '#test' });
     panel.set('color', '#00f'); // this.element 的背景色自动变为 '#00f'
@@ -91,6 +93,60 @@ define(function(require, exports, module) {
 虽然在组件实例化的时候也会设置属性，但不会触发 `change:x` 事件，即不会执行 `_onChangeX`。
 
 ## API
+
+### attrs 的设置
+
+类定义时, 通过设置 attrs 来定义该类有哪些属性, 每个属性是通过如下方式定义的:
+
+```js
+{
+    // 方式一: 直接设置默认值
+    attr1: "aString",
+
+    // 方式二: 通过对象的 value 设置默认值, 相当于方式一
+    attr2: {
+        value: "bString"
+    },
+
+    // 方式三: 设置 setter
+    attr3: {
+        value: "cString",
+        // setter 会在对象调用 set() 时触发, 可以在此时做些处理,
+        // 比如强制类型转换
+        // 即当 obj.set('attr3', 1) 后, 会调用 setter, 转换成 '1'
+        // setter 的 this 为当前实例对象
+        setter: function(v) {
+            return v + ""
+        }
+    },
+
+    // 方式四: 设置 getter
+    attr4: {
+        value: 10,
+        // getter 会在对象调用 get() 时触发, 同样可以在此时做些处理,
+        // 比如存的是美元, 转成人民币
+        // 即当 obj.get('attr4') 后, 会调用 getter
+        // getter 的 this 为当前实例对象
+        getter: function(v) {
+            // 美元 * 汇率 = 人民币
+            return v * 6.8
+        }
+    },
+
+    // 方式五: readonly
+    attr5: {
+        value: 0,
+        // 设置 readOnly 之后, 没法通过 obj.set() 的方式设置值, 即不可更改
+        // 可以同时设置 getter 来调整
+        // 默认 readOnly 为 false
+        readOnly: true,
+        getter: function() {
+            return Math.ceil(this.get('panels').length / this.get('step'));
+        }
+    }
+}
+
+```
 
 ### set `.set(key, value, options)`
 
