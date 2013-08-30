@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/aralejs/base.png)](https://travis-ci.org/aralejs/base) [![Coverage Status](https://coveralls.io/repos/aralejs/base/badge.png?branch=master)](https://coveralls.io/r/aralejs/base)
 
-Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。
+Base 是一个基础类，提供 [Class](http://aralejs.org/class/)、[Events](http://aralejs.org/events/)、Attribute 和 Aspect 支持。
 
 ---
 
