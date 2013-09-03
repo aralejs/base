@@ -950,6 +950,21 @@ define(function(require) {
 
       $("#test").remove();
     });
+
+    it('attribuet start with _', function() {
+      var spy = sinon.spy();
+      var T = Base.extend({
+        attrs: {
+          _a: ''
+        },
+        _onChange_a: spy
+      });
+
+      var t = new T();
+      t.set('_a', 'a');
+      expect(t.get('_a')).to.be('a');
+      expect(spy.calledOnce).to.be.ok();
+    });
   });
 
 });
