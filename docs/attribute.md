@@ -77,8 +77,7 @@ define(function(require, exports, module) {
 });
 ```
 
-使用 `extend` 创建类时，如果混入了 `Events` 模块，则在初始化时，实例中的 `_onChangeX`
-方法会自动注册到 `change:x` 事件的回调队列中：
+在初始化时，实例中的 `_onChangeX` 方法会自动注册到 `change:x` 事件的回调队列中：
 
 ```js
 /* test2.js */
