@@ -1,69 +1,64 @@
 // Karma configuration
 // Generated on Mon Aug 05 2013 14:17:06 GMT+0800 (CST)
 
+module.exports = function(config) {
+  config.set({
 
-// base path, that will be used to resolve files and exclude
-basePath = '.';
+    // base path, that will be used to resolve files and exclude
+    basePath: '.',
 
+    // frameworks to use
+    frameworks: ['mocha'],
 
-// list of files / patterns to load in the browser
-files = [
-  MOCHA,
-  MOCHA_ADAPTER,
-  'http://assets.spmjs.org/seajs/??seajs/2.1.0/sea.js',
-  {pattern: 'src/*.js', included: false},
-  {pattern: 'tests/*-spec.js', included: false},
-  './tests/test-main.js'
-];
+    // list of files / patterns to load in the browser
+    files: [
+      'http://assets.spmjs.org/seajs/??seajs/2.1.0/sea.js',
+      {pattern: 'src/*.js', included: false},
+      {pattern: 'tests/*-spec.js', included: false},
+      './tests/test-main.js'
+    ],
 
+    // list of files to exclude
+    exclude: [
 
-// list of files to exclude
-exclude = [
+    ],
 
-];
+    // test results reporter to use
+    // possible values: 'dots', 'progress', 'junit'
+    reporters: ['progress'],
 
+    // web server port
+    port: 9876,
 
-// test results reporter to use
-// possible values: 'dots', 'progress', 'junit'
-reporters = ['progress'];
+    // cli runner port
+    runnerPort: 9100,
 
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
 
-// web server port
-port = 9876;
+    // level of logging
+    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+    logLevel: LOG_INFO,
 
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: true,
 
-// cli runner port
-runnerPort = 9100;
+    // Start these browsers, currently available:
+    // - Chrome
+    // - ChromeCanary
+    // - Firefox
+    // - Opera
+    // - Safari (only Mac)
+    // - PhantomJS
+    // - IE (only Windows)
+    browsers: ['Chrome'],
 
+    // If browser does not capture in given timeout [ms], kill it
+    captureTimeout: 60000,
 
-// enable / disable colors in the output (reporters and logs)
-colors = true;
+    // Continuous Integration mode
+    // if true, it capture browsers, run tests and exit
+    singleRun: false
+  });
+};
 
-
-// level of logging
-// possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-logLevel = LOG_INFO;
-
-
-// enable / disable watching file and executing tests whenever any file changes
-autoWatch = true;
-
-
-// Start these browsers, currently available:
-// - Chrome
-// - ChromeCanary
-// - Firefox
-// - Opera
-// - Safari (only Mac)
-// - PhantomJS
-// - IE (only Windows)
-browsers = ['Chrome'];
-
-
-// If browser does not capture in given timeout [ms], kill it
-captureTimeout = 60000;
-
-
-// Continuous Integration mode
-// if true, it capture browsers, run tests and exit
-singleRun = false;
