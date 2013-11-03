@@ -89,3 +89,7 @@ define(function(require) {
 });
 ```
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/aralejs/base/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
