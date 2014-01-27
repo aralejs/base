@@ -42,16 +42,16 @@ define(function(require, exports) {
   };
 
 
-  // Set a hash of model attributes on the object, firing `"change"` unless
+  // Set a hash of model attributes on the object, firing `'change'` unless
   // you choose to silence it.
   exports.set = function(key, val, options) {
     var attrs = {};
 
-    // set("key", val, options)
+    // set('key', val, options)
     if (isString(key)) {
       attrs[key] = val;
     }
-    // set({ "key": val, "key2": val2 }, options)
+    // set({ 'key': val, 'key2': val2 }, options)
     else {
       attrs = key;
       options = val;
@@ -108,8 +108,8 @@ define(function(require, exports) {
   };
 
 
-  // Call this method to manually fire a `"change"` event for triggering
-  // a `"change:attribute"` event for each changed attribute.
+  // Call this method to manually fire a `'change'` event for triggering
+  // a `'change:attribute'` event for each changed attribute.
   exports.change = function() {
     var changed = this.__changedAttrs;
 
@@ -135,22 +135,6 @@ define(function(require, exports) {
   var toString = Object.prototype.toString;
   var hasOwn = Object.prototype.hasOwnProperty;
 
-  /**
-   * Detect the JScript [[DontEnum]] bug:
-   * In IE < 9 an objects own properties, shadowing non-enumerable ones, are
-   * made non-enumerable as well.
-   * https://github.com/bestiejs/lodash/blob/7520066fc916e205ef84cb97fbfe630d7c154158/lodash.js#L134-L144
-   */
-  /** Detect if own properties are iterated after inherited properties (IE < 9) */
-  var iteratesOwnLast;
-  (function() {
-    var props = [];
-    function Ctor() { this.x = 1; }
-    Ctor.prototype = { 'valueOf': 1, 'y': 1 };
-    for (var prop in new Ctor()) { props.push(prop); }
-    iteratesOwnLast = props[0] !== 'x';
-  }());
-
   var isArray = Array.isArray || function(val) {
     return toString.call(val) === '[object Array]';
   };
@@ -163,25 +147,17 @@ define(function(require, exports) {
     return toString.call(val) === '[object Function]';
   }
 
-  function isWindow(o) {
-    return o != null && o == o.window;
-  }
-
   function isPlainObject(o) {
     // Must be an Object.
-    // Because of IE, we also have to check the presence of the constructor
-    // property. Make sure that DOM nodes and window objects don't
-    // pass through, as well
-    if (!o || toString.call(o) !== "[object Object]" ||
-        o.nodeType || isWindow(o)) {
+    if (!o || toString.call(o) !== '[object Object]') {
       return false;
     }
 
     try {
       // Not own constructor property must be Object
       if (o.constructor &&
-          !hasOwn.call(o, "constructor") &&
-          !hasOwn.call(o.constructor.prototype, "isPrototypeOf")) {
+          !hasOwn.call(o, 'constructor') &&
+          !hasOwn.call(o.constructor.prototype, 'isPrototypeOf')) {
         return false;
       }
     } catch (e) {
@@ -191,15 +167,6 @@ define(function(require, exports) {
 
     var key;
 
-    // Support: IE<9
-    // Handle iteration over inherited properties before own properties.
-    // http://bugs.jquery.com/ticket/12199
-    if (iteratesOwnLast) {
-      for (key in o) {
-        return hasOwn.call(o, key);
-      }
-    }
-
     // Own properties are enumerated firstly, so to speed up,
     // if last one is own, then all properties are own.
     for (key in o) {}
@@ -208,8 +175,7 @@ define(function(require, exports) {
   }
 
   function isEmptyObject(o) {
-    if (!o || toString.call(o) !== "[object Object]" ||
-        o.nodeType || isWindow(o) || !o.hasOwnProperty) {
+    if (!o || toString.call(o) !== '[object Object]') {
       return false;
     }
 
@@ -220,7 +186,7 @@ define(function(require, exports) {
   }
 
   function merge(receiver, supplier) {
-    var key, value;
+    var key;
 
     for (key in supplier) {
       if (supplier.hasOwnProperty(key)) {
@@ -445,7 +411,7 @@ define(function(require, exports) {
       // Strings, numbers, dates, and booleans are compared by value.
       case '[object String]':
         // Primitives and their corresponding object wrappers are
-        // equivalent; thus, `"5"` is equivalent to `new String("5")`.
+        // equivalent; thus, `'5'` is equivalent to `new String('5')`.
         return a == String(b);
 
       case '[object Number]':

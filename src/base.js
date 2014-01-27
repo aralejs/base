@@ -11,8 +11,6 @@ define(function(require, exports, module) {
 
 
   module.exports = Class.create({
-    Implements: [Events, Aspect, Attribute],
-
     initialize: function(config) {
       this.initAttrs(config);
 
@@ -34,7 +32,7 @@ define(function(require, exports, module) {
       // https://github.com/aralejs/widget/issues/50
       this.destroy = function() {};
     }
-  });
+  }).implement([Events, Aspect, Attribute]);
 
 
   function parseEventsFromInstance(host, attrs) {
