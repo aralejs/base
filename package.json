@@ -1,6 +1,5 @@
 {
-    "name": "base",
-    "family": "arale",
+    "name": "arale-base",
     "version": "1.1.1",
     "description": "Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。",
     "keywords": ["infrastructure"],
@@ -18,10 +17,16 @@
         "url": "https://github.com/aralejs/base/issues"
     },
     "spm": {
-        "alias": {
-            "class": "arale/class/1.1.0/class",
-            "events": "arale/events/1.1.0/events"
+        "dependencies": {
+            "arale-class": "1.1.0",
+            "arale-events": "1.1.0"
         },
-        "output": ["base.js"]
+        "devDependencies": {
+            "expect.js": "0.3.1",
+            "sinon": "1.6.0",
+            "moment": "2.6.0",
+            "jquery": "1.7.2"
+        },
+        "main": "base.js"
     }
 }
