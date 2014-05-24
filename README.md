@@ -17,42 +17,38 @@ Base 是一个基础类，提供 [Class](http://aralejs.org/class/)、[Events](h
 
 ```js
 /* pig.js */
-define(function(require, exports, module) {
-    var Base = require('base');
+var Base = require('base');
 
-    var Pig = Base.extend({
-        attrs: {
-            name: ''
-        },
-        talk: function() {
-            alert('我是' + this.get('name'));
-        }
-    });
-
-    module.exports = Pig;
+var Pig = Base.extend({
+    attrs: {
+        name: ''
+    },
+    talk: function() {
+        alert('我是' + this.get('name'));
+    }
 });
+
+module.exports = Pig;
 ```
 
 继承 Base 可覆盖 initialize 构造函数， **但需要调用父类构造函数**，如 arale 的 widget 定义了组件的生命周期
 
 ```js
 /* widget.js */
-define(function(require, exports, module) {
-    var Base = require('base');
+var Base = require('base');
 
-    var Widget = Base.extend({
-        initialize: function(config) {
-            Widget.superclass.initialize.call(this, config);
-            this.parseElement()
-            this.initProps()
-            this.delegateEvents()
-            this.setup()
-        },
-        ...
-    });
-
-    module.exports = Widget;
+var Widget = Base.extend({
+    initialize: function(config) {
+        Widget.superclass.initialize.call(this, config);
+        this.parseElement()
+        this.initProps()
+        this.delegateEvents()
+        this.setup()
+    },
+    ...
 });
+
+module.exports = Widget;
 ```
 
 Base 继承和混入了一下功能，可查看文档 ：
@@ -69,23 +65,20 @@ Base 是使用 `Class` 创建的一个基础类，默认混入了 `Events`、`At
 
 ```js
 /* base.js */
-define(function(require) {
+var Class = require('class');
+var Events = require('events');
+var Aspect = require('./aspect');
+var Attribute = require('./attribute');
 
-    var Class = require('class');
-    var Events = require('events');
-    var Aspect = require('./aspect');
-    var Attribute = require('./attribute');
+var Base = Class.create({
+    Implements: [Events, Aspect, Attribute],
 
-    var Base = Class.create({
-        Implements: [Events, Aspect, Attribute],
-
-        initialize: function(config) {
-            ...
-        },
-
+    initialize: function(config) {
         ...
-    });
+    },
 
     ...
 });
+
+...
 ```

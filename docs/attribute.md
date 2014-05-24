@@ -15,78 +15,72 @@
 
 ```js
 /* panel.js */
-define(function(require, exports, module) {
-    var Base = require('base');
-    var $ = require('$');
+var Base = require('base');
+var $ = require('$');
 
-    var Panel = Base.extend({
-        attrs: {
-            element: {
-                value: '#test',
-                readOnly: true
+var Panel = Base.extend({
+    attrs: {
+        element: {
+            value: '#test',
+            readOnly: true
+        },
+        color: '#fff',
+        size: {
+            width: 100,
+            height: 100
+        },
+        x: 200,
+        y: 200,
+        xy: {
+            getter: function() {
+                return this.get('x') + this.get('y');
             },
-            color: '#fff',
-            size: {
-                width: 100,
-                height: 100
-            },
-            x: 200,
-            y: 200,
-            xy: {
-                getter: function() {
-                    return this.get('x') + this.get('y');
-                },
-                setter: function(val) {
-                    this.set('x', val[0]);
-                    this.set('y', val[1]);
-                }
+            setter: function(val) {
+                this.set('x', val[0]);
+                this.set('y', val[1]);
             }
-        },
-
-        initialize: function(config) {
-            Panel.superclass.initialize.call(this, config);
-            this.element = $(config.element).eq(0);
-        },
-
-        _onChangeColor: function(val) {
-            this.element.css('backgroundColor', val);
         }
-    });
+    },
 
-    exports.Panel = Panel;
+    initialize: function(config) {
+        Panel.superclass.initialize.call(this, config);
+        this.element = $(config.element).eq(0);
+    },
+
+    _onChangeColor: function(val) {
+        this.element.css('backgroundColor', val);
+    }
 });
+
+exports.Panel = Panel;
 ```
 
 **在 `initialize` 方法中，调用 `superclass.initialize` 方法，就可以自动设置好实例的属性。**
 
 ```js
 /* test.js */
-define(function(require, exports, module) {
-    var Panel = require('./panel').Panel;
+var Panel = require('./panel').Panel;
 
-    var panel = new Panel({
-        element: '#test',
-        color: '#f00',
-        size: {
-            width: 200
-        }
-    });
-
-    console.log(panel.get('color')); // '#f00'
-    console.log(panel.get('size')); // { width: 200, height: 100 }
+var panel = new Panel({
+    element: '#test',
+    color: '#f00',
+    size: {
+        width: 200
+    }
 });
+
+console.log(panel.get('color')); // '#f00'
+console.log(panel.get('size')); // { width: 200, height: 100 }
 ```
 
 在初始化时，实例中的 `_onChangeX` 方法会自动注册到 `change:x` 事件的回调队列中：
 
 ```js
 /* test2.js */
-define(function(require, exports, module) {
-    var Panel = require('./panel').Panel;
+var Panel = require('./panel').Panel;
 
-    var panel = new Panel({ element: '#test' });
-    panel.set('color', '#00f'); // this.element 的背景色自动变为 '#00f'
-});
+var panel = new Panel({ element: '#test' });
+panel.set('color', '#00f'); // this.element 的背景色自动变为 '#00f'
 ```
 
 虽然在组件实例化的时候也会设置属性，但不会触发 `change:x` 事件，即不会执行 `_onChangeX`。
