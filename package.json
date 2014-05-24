@@ -1,32 +1,32 @@
 {
-    "name": "arale-base",
-    "version": "1.2.0",
-    "description": "Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。",
-    "keywords": ["infrastructure"],
-    "homepage": "http://aralejs.org/base",
-    "author": "贯高 <sakura9515@gmail.com>",
-    "maintainers": [
-        "玉伯 <lifesinger@gmail.com>",
-        "贯高 <sakura9515@gmail.com>"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/aralejs/base.git"
+  "name": "arale-base",
+  "version": "1.2.0",
+  "description": "Base 是一个基础类，提供 Class、Events、Attribute 和 Aspect 支持。",
+  "keywords": ["infrastructure"],
+  "homepage": "http://aralejs.org/base",
+  "author": "贯高 <sakura9515@gmail.com>",
+  "maintainers": [
+    "玉伯 <lifesinger@gmail.com>",
+    "贯高 <sakura9515@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aralejs/base.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aralejs/base/issues"
+  },
+  "spm": {
+    "dependencies": {
+      "arale-class": "1.2.0",
+      "arale-events": "1.2.0"
     },
-    "bugs": {
-        "url": "https://github.com/aralejs/base/issues"
+    "devDependencies": {
+      "expect.js": "0.3.1",
+      "sinon": "1.6.0",
+      "moment": "2.6.0",
+      "jquery": "1.7.2"
     },
-    "spm": {
-        "dependencies": {
-            "arale-class": "1.2.0",
-            "arale-events": "1.2.0"
-        },
-        "devDependencies": {
-            "expect.js": "0.3.1",
-            "sinon": "1.6.0",
-            "moment": "2.6.0",
-            "jquery": "1.7.2"
-        },
-        "main": "base.js"
-    }
+    "main": "base.js"
+  }
 }
