@@ -3,7 +3,8 @@
 ---
 
 [![spm package](http://spmjs.io/badge/arale-base)](http://spmjs.io/package/arale-base)
-[![Build Status](https://travis-ci.org/aralejs/base.png)](https://travis-ci.org/aralejs/base) [![Coverage Status](https://coveralls.io/repos/aralejs/base/badge.png?branch=master)](https://coveralls.io/r/aralejs/base)
+[![Build Status](https://img.shields.io/travis/aralejs/base.svg?style=flat)](https://travis-ci.org/aralejs/base)
+[![Coverage Status](https://img.shields.io/coveralls/aralejs/base.svg?style=flat)](https://coveralls.io/r/aralejs/base)
 
 Base 是一个基础类，提供 [Class](http://aralejs.org/class/)、[Events](http://aralejs.org/events/)、Attribute 和 Aspect 支持。
 
